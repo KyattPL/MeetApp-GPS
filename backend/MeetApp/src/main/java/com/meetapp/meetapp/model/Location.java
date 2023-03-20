@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 
 @Entity
 @Getter
@@ -25,12 +28,8 @@ public class Location {
     private Voivodeship voivodeship;
 
     @NotNull
-    @Column(name = "latitude", nullable = false)
-    private Double latitude;
-
-    @NotNull
-    @Column(name = "longitude", nullable = false)
-    private Double longitude;
+    @Column(nullable = false, columnDefinition = "geometry(Point,4326)")
+    private Point point;
 
     public Location() {
         id = 0;
@@ -41,7 +40,8 @@ public class Location {
 
         this.city = city;
         this.voivodeship = voivodeship;
-        this.latitude = latitude;
-        this.longitude = longitude;
+
+        GeometryFactory geometryFactory = new GeometryFactory();
+        this.point = geometryFactory.createPoint(new Coordinate(longitude, latitude));
     }
 }

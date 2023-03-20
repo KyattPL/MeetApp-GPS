@@ -1,13 +1,22 @@
+version: '3'
 services:
   meet-app-postgresql:
-    image: 'postgres:latest'
+    build:
+      context: .
+      dockerfile: Dockerfile-db
     ports:
      - 5432:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: meetapp
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d/
+      - database_volume:/var/lib/postgresql/data
   meet-app-redis:
     image: redis:latest
     ports:
      - 6379:6379
+     
+volumes:
+  database_volume:
