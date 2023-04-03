@@ -2,6 +2,8 @@
     import * as L from 'leaflet';
     import 'leaflet/dist/leaflet.css';
 
+    import execute from '../../lib/fetchWrapper';
+
     import Header from '../../lib/Header/Header.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
 
@@ -21,6 +23,25 @@
 
     function mapAction(container) {
         map = createMap(container);
+
+        map.on('moveend', () => {
+            const coords = map.getBounds();
+            const upperLat = coords._northEast.lat;
+            const lowerLat = coords._southWest.lat;
+            const leftLon = coords._southWest.lng;
+            const rightLon = coords._northEast.lng;
+
+            let urlParams = new URLSearchParams();
+            urlParams.append('upperLat', upperLat);
+            urlParams.append('lowerLat', lowerLat);
+            urlParams.append('leftLon', leftLon);
+            urlParams.append('rightLon', rightLon);
+
+            execute(`map/getLocationsInBox?${urlParams.toString()}`, 'GET')
+                .then((r) => r.json())
+                .then((r) => console.log(r));
+        });
+
         return {
             destroy: () => {
                 map.remove();

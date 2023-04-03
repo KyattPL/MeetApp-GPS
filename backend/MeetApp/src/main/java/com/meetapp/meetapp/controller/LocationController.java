@@ -22,4 +22,12 @@ public class LocationController {
     public List<Location> getLocations(@RequestParam(required = false) String nameSearch) {
         return locationService.retrieveLocations(nameSearch);
     }
+
+    @GetMapping("/map/getLocationsInBox")
+    public List<Location> getLocationsInBox(@RequestParam Double upperLat,
+                                            @RequestParam Double lowerLat,
+                                            @RequestParam Double leftLon,
+                                            @RequestParam Double rightLon) {
+        return locationService.retrieveLocationsInBox(upperLat, lowerLat, leftLon, rightLon);
+    }
 }
