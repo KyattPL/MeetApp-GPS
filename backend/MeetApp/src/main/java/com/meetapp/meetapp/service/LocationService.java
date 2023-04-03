@@ -5,6 +5,7 @@ import com.meetapp.meetapp.repository.LocationRepository;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class LocationService {
     }
 
     public List<Location> retrieveLocationsInBox(Double upperLat, Double lowerLat, Double leftLon, Double rightLon) {
-        GeometryFactory geometryFactory = new GeometryFactory();
+        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
         Coordinate[] coords = new Coordinate[] {
                 new Coordinate(leftLon, lowerLat),
                 new Coordinate(leftLon, upperLat),

@@ -1,5 +1,8 @@
 package com.meetapp.meetapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -7,6 +10,8 @@ import lombok.Setter;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+import org.n52.jackson.datatype.jts.GeometryDeserializer;
+import org.n52.jackson.datatype.jts.GeometrySerializer;
 
 @Entity
 @Getter
@@ -28,6 +33,8 @@ public class Location {
     private Voivodeship voivodeship;
 
     @NotNull
+    @JsonSerialize(using = GeometrySerializer.class)
+    @JsonDeserialize(using = GeometryDeserializer.class)
     @Column(nullable = false, columnDefinition = "geometry(Point,4326)")
     private Point point;
 

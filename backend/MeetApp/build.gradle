@@ -29,6 +29,7 @@ dependencies {
     implementation 'com.google.api-client:google-api-client:2.0.0'
     implementation 'org.hibernate:hibernate-core:6.1.7.Final'
     implementation 'org.hibernate:hibernate-spatial:6.1.7.Final'
+    implementation 'org.n52.jackson:jackson-datatype-jts:1.2.10'
 
     implementation('org.springframework.session:spring-session-data-redis')
 
