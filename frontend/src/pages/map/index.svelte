@@ -8,6 +8,7 @@
     import Footer from '../../lib/Footer/Footer.svelte';
 
     let map;
+    let mapMarkers = null;
 
     function createMap(container) {
         let m = L.map(container).setView([51.107883, 17.038538], 13);
@@ -19,6 +20,21 @@
         }).addTo(m);
 
         return m;
+    }
+
+    function createMarkers(markerData, map) {
+        if (mapMarkers !== null) {
+            mapMarkers.clearLayers();
+        }
+
+        let newMarkers = [];
+        markerData.forEach((loc) => {
+            let newMarker = L.marker(loc.point.coordinates.reverse(), { interactive: true });
+            newMarker.on('click', (e) => newMarker.bindTooltip(loc.city.name).openTooltip());
+            newMarkers.push(newMarker);
+        });
+
+        mapMarkers = L.layerGroup(newMarkers).addTo(map);
     }
 
     function mapAction(container) {
@@ -39,7 +55,7 @@
 
             execute(`map/getLocationsInBox?${urlParams.toString()}`, 'GET')
                 .then((r) => r.json())
-                .then((r) => console.log(r));
+                .then((r) => createMarkers(r, map));
         });
 
         return {
