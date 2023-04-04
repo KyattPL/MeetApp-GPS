@@ -1,6 +1,5 @@
 package com.meetapp.meetapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
@@ -38,15 +37,18 @@ public class Location {
     @Column(nullable = false, columnDefinition = "geometry(Point,4326)")
     private Point point;
 
+    @NotNull
+    private Boolean isPostRelated;
     public Location() {
         id = 0;
     }
 
-    public Location(City city, Voivodeship voivodeship, Double latitude, Double longitude) {
+    public Location(City city, Voivodeship voivodeship, Double latitude, Double longitude, Boolean isPostRelated) {
         this();
 
         this.city = city;
         this.voivodeship = voivodeship;
+        this.isPostRelated = isPostRelated;
 
         GeometryFactory geometryFactory = new GeometryFactory();
         this.point = geometryFactory.createPoint(new Coordinate(longitude, latitude));

@@ -18,9 +18,9 @@ public class LocationController {
         this.locationService = locationService;
     }
 
-    @GetMapping("/locations")
-    public List<Location> getLocations(@RequestParam(required = false) String nameSearch) {
-        return locationService.retrieveLocations(nameSearch);
+    @GetMapping("/locationsNonPost")
+    public List<Location> getLocationsNonPost(@RequestParam(required = false) String nameSearch) {
+        return locationService.retrieveLocationsNonPost(nameSearch);
     }
 
     @GetMapping("/map/getLocationsInBox")

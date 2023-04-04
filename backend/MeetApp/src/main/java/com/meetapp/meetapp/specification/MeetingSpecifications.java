@@ -1,6 +1,7 @@
 package com.meetapp.meetapp.specification;
 
 import com.meetapp.meetapp.model.Category;
+import com.meetapp.meetapp.model.Location;
 import com.meetapp.meetapp.model.Meeting;
 import jakarta.persistence.criteria.Expression;
 import lombok.val;
@@ -23,7 +24,18 @@ public class MeetingSpecifications {
     }
 
     public static Specification<Meeting> hasLocation(List<Integer> locationIds) {
-        return (meeting, cq, cb) -> cb.in(meeting.get("location").get("id")).value(locationIds);
+        return (meeting, cq, cb) -> {
+            cq.distinct(true);
+            val locationSubquery = cq.subquery(Location.class);
+            val locationObj = locationSubquery.from(Location.class);
+
+            locationSubquery.select(locationObj);
+            locationSubquery.where(cb.in(locationObj.get("id")).value(locationIds),
+                    cb.equal(meeting.get("location").get("city"), locationObj.get("city")),
+                    cb.equal(meeting.get("location").get("voivodeship"), locationObj.get("voivodeship")));
+
+            return cb.exists(locationSubquery);
+        };
     }
 
     public static Specification<Meeting> titleContains(String searchedPhrase) {

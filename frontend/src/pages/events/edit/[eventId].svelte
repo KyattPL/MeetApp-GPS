@@ -12,7 +12,7 @@
     import MultiselectCategoryInput from '../../../lib/MultiselectCategoryInput/MultiselectCategoryInput.svelte';
     import SelectCityInput from '../../../lib/SelectCityInput/SelectCityInput.svelte';
     import MdAdd from 'svelte-icons/md/MdAdd.svelte';
-    import {userDetails} from "../../../lib/stores";
+    import { userDetails } from '../../../lib/stores';
 
     export let eventId: number;
 
@@ -287,7 +287,7 @@
                 <div class="bg-tea mx-1.5 my-4 p-2 rounded-lg">
                     <div id="cityInputBox" class="pb-2">
                         <SelectCityInput
-                            fetch="http://localhost:5173/api/locations?nameSearch=[query]"
+                            fetch="http://localhost:5173/api/locationsNonPost?nameSearch=[query]"
                             placeholder="Miasto"
                             inputId="citySelect"
                             bind:selected={cityValue}

@@ -26,11 +26,12 @@ public class AnnouncementSpecifications {
             cq.distinct(true);
             val locationSubquery = cq.subquery(Location.class);
             val locationObj = locationSubquery.from(Location.class);
-            Expression<City> locationCity = locationObj.get("city");
-            Expression<Voivodeship> locationVoivodeship = locationObj.get("voivodeship");
+
             locationSubquery.select(locationObj);
-            locationSubquery.where(cb.equal(announcement.get("location").get("city"), locationCity),
-                    cb.equal(announcement.get("location").get("voivodeship"), locationVoivodeship));
+            locationSubquery.where(cb.in(locationObj.get("id")).value(locationIds),
+                        cb.equal(announcement.get("location").get("city"), locationObj.get("city")),
+                        cb.equal(announcement.get("location").get("voivodeship"), locationObj.get("voivodeship")));
+
             return cb.exists(locationSubquery);
         };
     }

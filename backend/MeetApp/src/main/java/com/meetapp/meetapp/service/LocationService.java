@@ -18,8 +18,8 @@ public class LocationService {
         this.locationRepository = locationRepository;
     }
 
-    public List<Location> retrieveLocations(String nameSearch) {
-        List<Location> foundLocs = locationRepository.findDistinctTop10ByCityNameContainingIgnoreCaseOrderById(nameSearch);
+    public List<Location> retrieveLocationsNonPost(String nameSearch) {
+        List<Location> foundLocs = locationRepository.findDistinctTop10ByIsPostRelatedFalseAndCityNameContainingIgnoreCaseOrderById(nameSearch);
         return foundLocs;
     }
 
@@ -34,7 +34,7 @@ public class LocationService {
         };
 
         Polygon box = geometryFactory.createPolygon(coords);
-        List<Location> foundLocs = locationRepository.findWithin(box);
+        List<Location> foundLocs = locationRepository.findWithin(box).stream().filter(Location::getIsPostRelated).toList();
         return foundLocs;
     }
 }

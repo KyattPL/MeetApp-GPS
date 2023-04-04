@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface LocationRepository extends JpaRepository<Location, Integer> {
     Optional<Location> findByCityNameAndVoivodeshipName(String cityName, String voivodeshipName);
 
-    List<Location> findDistinctTop10ByCityNameContainingIgnoreCaseOrderById(String cityName);
+    List<Location> findDistinctTop10ByIsPostRelatedFalseAndCityNameContainingIgnoreCaseOrderById(String cityName);
 
     @Query("select l from Location l where within(l.point,:filter) = true")
     List<Location> findWithin(Geometry filter);
