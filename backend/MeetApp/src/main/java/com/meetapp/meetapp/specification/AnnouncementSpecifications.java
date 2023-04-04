@@ -1,7 +1,6 @@
 package com.meetapp.meetapp.specification;
 
-import com.meetapp.meetapp.model.Announcement;
-import com.meetapp.meetapp.model.Category;
+import com.meetapp.meetapp.model.*;
 import jakarta.persistence.criteria.Expression;
 import lombok.val;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,7 +22,17 @@ public class AnnouncementSpecifications {
     }
 
     public static Specification<Announcement> hasLocation(List<Integer> locationIds) {
-        return (announcement, cq, cb) -> cb.in(announcement.get("location").get("id")).value(locationIds);
+        return (announcement, cq, cb) -> {
+            cq.distinct(true);
+            val locationSubquery = cq.subquery(Location.class);
+            val locationObj = locationSubquery.from(Location.class);
+            Expression<City> locationCity = locationObj.get("city");
+            Expression<Voivodeship> locationVoivodeship = locationObj.get("voivodeship");
+            locationSubquery.select(locationObj);
+            locationSubquery.where(cb.equal(announcement.get("location").get("city"), locationCity),
+                    cb.equal(announcement.get("location").get("voivodeship"), locationVoivodeship));
+            return cb.exists(locationSubquery);
+        };
     }
 
     public static Specification<Announcement> titleContains(String searchedPhrase) {
