@@ -75,8 +75,18 @@
         return true;
     };
 
+    const validateSpot = () => {
+        let errorMessage = document.getElementById('spotErrorMsg');
+        if ($selectedLatitude === 0 || $selectedLongitude === 0) {
+            errorMessage.classList.remove('hidden');
+            return false;
+        }
+        errorMessage.className += ' hidden';
+        return true;
+    };
+
     const handleSubmit = () => {
-        if (title.getIsValid() && validateCategory() && validateCity() && validateDescription()) {
+        if (title.getIsValid() && validateCategory() && validateCity() && validateDescription() && validateSpot()) {
             let requestBody = {
                 cityId: cityValue.city.id,
                 voivodeshipId: cityValue.voivodeship.id,
@@ -171,8 +181,9 @@
                     />
                     <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
                 </div>
-                <div class="flex justify-center">
+                <div class="flex flex-col items-center">
                     <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={openSpotPicker}>Wybierz miejsce</Button>
+                    <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="spotErrorMsg">Musisz wybrać lokalizację</p>
                 </div>
                 <div class="">
                     <PostDescription bind:value={descriptionValue} maxLength={200} placeholder="Opis" />
