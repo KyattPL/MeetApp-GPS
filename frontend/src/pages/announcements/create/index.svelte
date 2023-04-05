@@ -14,6 +14,7 @@
     import PostNameInput from '../../../lib/PostNameInput/PostNameInput.svelte';
     import PostDescription from '../../../lib/PostDescription/PostDescription.svelte';
     import { userDetails, selectedLatitude, selectedLongitude } from '../../../lib/stores';
+    import calculateDistanceBetweenCoords from '../../../lib/utils';
 
     let title = null;
 
@@ -86,7 +87,7 @@
     };
 
     const handleSubmit = () => {
-        if (title.getIsValid() && validateCategory() && validateCity() && validateDescription() && validateSpot()) {
+        if (title.getIsValid() && validateCategory() && validateCity() && validateSpot() && validateDescription()) {
             let requestBody = {
                 cityId: cityValue.city.id,
                 voivodeshipId: cityValue.voivodeship.id,
@@ -105,13 +106,24 @@
 
     function submitChoice() {
         let coords = map.getCenter();
+        let distance = calculateDistanceBetweenCoords(cityValue.lat, cityValue.lng, coords.lat, coords.lng);
+
+        console.log(distance);
+        // Empirycznie sprawdzone, że tyle max od środka Warszawy do najdalszego punktu jest około xd
+        if (distance > 17_000) {
+            let toastObj = document.getElementById('tooFarToast');
+            toastObj.classList.remove('opacity-0');
+            setTimeout(() => (toastObj.className += ' opacity-0'), 5000);
+            return;
+        }
+
         $selectedLatitude = coords.lat;
         $selectedLongitude = coords.lng;
         isSpotPickerActive = false;
     }
 
     function createMap(container) {
-        let m = L.map(container).setView([51.107883, 17.038538], 13);
+        let m = L.map(container).setView([cityValue.lat, cityValue.lng], 13);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
             attribution: `&copy;<a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>,
           &copy;<a href="https://carto.com/attributions" target="_blank">CARTO</a>`,
@@ -154,6 +166,13 @@
                 <MdCheck />
             </div>
         </button>
+        <div
+            class="absolute rounded-lg text-ivory bg-red-700 left-1/2 mx-auto bottom-10 h-16 w-48 lg:h-24 lg:w-72 z-[9999] opacity-0
+        transition ease-in-out delay-300 font-bold border-2 border-cocoa px-4 py-2 transform -translate-x-1/2 pointer-events-none"
+            id="tooFarToast"
+        >
+            <p>Za daleko od wybranego miasta!</p>
+        </div>
         <div use:mapAction class="h-[calc(100%-4rem)] lg:h-[calc(100%-4rem)]" />
     </div>
 {:else}

@@ -16,7 +16,7 @@
     function updateOptions(newArr) {
         options = [];
         for (let loc of newArr) {
-            options.push({ id: loc.id, city: loc.city, voivodeship: loc.voivodeship });
+            options.push({ id: loc.id, city: loc.city, voivodeship: loc.voivodeship, lat: loc.point.coordinates[1], lng: loc.point.coordinates[0] });
         }
     }
 
