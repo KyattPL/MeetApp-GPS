@@ -10,13 +10,13 @@
     let options = [];
 
     function cityRenderer(item, isSelected) {
-        return `${item.city}<span class='text-gray'>, ${item.voivodeship}</span>`;
+        return `${item.city.name}<span class='text-gray'>, ${item.voivodeship.name}</span>`;
     }
 
     function updateOptions(newArr) {
         options = [];
         for (let loc of newArr) {
-            options.push({ id: loc.id, city: loc.city.name, voivodeship: loc.voivodeship.name });
+            options.push({ id: loc.id, city: loc.city, voivodeship: loc.voivodeship });
         }
     }
 

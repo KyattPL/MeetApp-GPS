@@ -3,14 +3,13 @@ package com.meetapp.meetapp.service;
 import com.meetapp.meetapp.configuration.Constants;
 import com.meetapp.meetapp.dto.*;
 import com.meetapp.meetapp.model.*;
-import com.meetapp.meetapp.repository.CategoryRepository;
-import com.meetapp.meetapp.repository.ClientRepository;
-import com.meetapp.meetapp.repository.EventRepository;
-import com.meetapp.meetapp.repository.LocationRepository;
+import com.meetapp.meetapp.repository.*;
 import com.meetapp.meetapp.security.SessionManager;
 import com.meetapp.meetapp.specification.EventSpecifications;
 import jakarta.servlet.http.HttpSession;
 import lombok.val;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -35,13 +34,18 @@ public class EventService {
     private final LocationRepository locationRepository;
     private final ClientRepository clientRepository;
     private final CategoryRepository categoryRepository;
+    private final CityRepository cityRepository;
+    private final VoivodeshipRepository voivodeshipRepository;
 
     public EventService(EventRepository eventRepository, LocationRepository locationRepository,
-                        ClientRepository clientRepository, CategoryRepository categoryRepository) {
+                        ClientRepository clientRepository, CategoryRepository categoryRepository,
+                        CityRepository cityRepository, VoivodeshipRepository voivodeshipRepository) {
         this.eventRepository = eventRepository;
         this.locationRepository = locationRepository;
         this.clientRepository = clientRepository;
         this.categoryRepository = categoryRepository;
+        this.cityRepository = cityRepository;
+        this.voivodeshipRepository = voivodeshipRepository;
     }
 
     public List<EventDTO> retrieveEvents(List<Integer> categoryIds, List<Integer> locationIds,
@@ -150,7 +154,8 @@ public class EventService {
     public Event createEvent(EventCreationDTO newEvent, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client foundClient = findClientOrThrow(email);
-        Location foundLocation = findLocationOrThrow(newEvent.getLocationId());
+        City foundCity = findCityOrThrow(newEvent.getCityId());
+        Voivodeship foundVoivodeship = findVoivodeshipOrThrow(newEvent.getVoivodeshipId());
         Instant startDate = parseDateOrThrow(newEvent.getStartDate());
         Instant endDate = parseDateOrThrow(newEvent.getEndDate());
         String pictureUri = newEvent.getPicture() != null ? savePictureAndGetPath(newEvent.getPicture()) : null;
@@ -165,8 +170,11 @@ public class EventService {
 
         List<Category> foundCategories = findCategories(newEvent.getCategoryIds());
 
+        Location newLocation = new Location(foundCity, foundVoivodeship, newEvent.getLatitude(),
+                newEvent.getLongitude(), true);
+
         Event eventToSave =
-                new Event(foundClient, foundLocation, newEvent.getTitle(), newEvent.getDescription(), startDate,
+                new Event(foundClient, locationRepository.save(newLocation), newEvent.getTitle(), newEvent.getDescription(), startDate,
                         endDate, new HashSet<>(foundCategories), newEvent.getPersonQuota(), newEvent.getSchedule());
         eventToSave.setPicture(pictureUri);
 
@@ -176,7 +184,6 @@ public class EventService {
     public Event updateEvent(Integer eventId, EventCreationDTO updatedEvent, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client supposedAuthor = findClientOrThrow(email);
-        Location foundLocation = findLocationOrThrow(updatedEvent.getLocationId());
         Instant startDate = parseDateOrThrow(updatedEvent.getStartDate());
         Instant endDate = parseDateOrThrow(updatedEvent.getEndDate());
         Event foundEvent = findEventOrThrow(eventId);
@@ -191,13 +198,22 @@ public class EventService {
         }
 
         if (foundEvent.getAuthor().equals(supposedAuthor)) {
+            Location existingLocation = foundEvent.getLocation();
+            existingLocation.setCity(findCityOrThrow(updatedEvent.getCityId()));
+            existingLocation.setVoivodeship(findVoivodeshipOrThrow(updatedEvent.getVoivodeshipId()));
+            existingLocation.setIsPostRelated(true);
+            existingLocation.setPoint(new GeometryFactory().createPoint(new Coordinate(
+                    updatedEvent.getLongitude(),
+                    updatedEvent.getLatitude()
+            )));
+
             foundEvent.setDescription(updatedEvent.getDescription());
             foundEvent.setTitle(updatedEvent.getTitle());
             foundEvent.setSchedule(updatedEvent.getSchedule());
             foundEvent.setEndDate(endDate);
             foundEvent.setStartDate(startDate);
             foundEvent.setPersonQuota(updatedEvent.getPersonQuota());
-            foundEvent.setLocation(foundLocation);
+            foundEvent.setLocation(locationRepository.save(existingLocation));
             foundEvent.setIsActive(true);
             foundEvent.setPicture(pictureUri);
             foundEvent.setCategories(new HashSet<>(findCategories(updatedEvent.getCategoryIds())));
@@ -245,6 +261,16 @@ public class EventService {
     public Location findLocationOrThrow(Integer locationId) {
         return locationRepository.findById(locationId).orElseThrow(
                 () -> new NoSuchElementException("A location with id: " + locationId + " does not exist."));
+    }
+
+    public City findCityOrThrow(Integer cityId) {
+        return cityRepository.findById(cityId).orElseThrow(
+                () -> new NoSuchElementException("A city with id: " + cityId + " does not exist."));
+    }
+
+    public Voivodeship findVoivodeshipOrThrow(Integer voivodeshipId) {
+        return voivodeshipRepository.findById(voivodeshipId).orElseThrow(
+                () -> new NoSuchElementException("A voivodeship with id: " + voivodeshipId + " does not exist."));
     }
 
     public Client findClientOrThrow(String email) {

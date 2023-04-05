@@ -6,14 +6,14 @@ import com.meetapp.meetapp.dto.AnnouncementDTO;
 import com.meetapp.meetapp.dto.PostDTO;
 import com.meetapp.meetapp.dto.SingleAnnouncementDTO;
 import com.meetapp.meetapp.model.*;
-import com.meetapp.meetapp.repository.AnnouncementRepository;
-import com.meetapp.meetapp.repository.CategoryRepository;
-import com.meetapp.meetapp.repository.ClientRepository;
-import com.meetapp.meetapp.repository.LocationRepository;
+import com.meetapp.meetapp.repository.*;
 import com.meetapp.meetapp.security.SessionManager;
 import com.meetapp.meetapp.specification.AnnouncementSpecifications;
 import jakarta.servlet.http.HttpSession;
 import lombok.val;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -30,13 +30,18 @@ public class AnnouncementService {
     private final LocationRepository locationRepository;
     private final ClientRepository clientRepository;
     private final CategoryRepository categoryRepository;
+    private final CityRepository cityRepository;
+    private final VoivodeshipRepository voivodeshipRepository;
 
     public AnnouncementService(AnnouncementRepository announcementRepository, LocationRepository locationRepository,
-                               ClientRepository clientRepository, CategoryRepository categoryRepository) {
+                               ClientRepository clientRepository, CategoryRepository categoryRepository,
+                               CityRepository cityRepository, VoivodeshipRepository voivodeshipRepository) {
         this.announcementRepository = announcementRepository;
         this.locationRepository = locationRepository;
         this.clientRepository = clientRepository;
         this.categoryRepository = categoryRepository;
+        this.cityRepository = cityRepository;
+        this.voivodeshipRepository = voivodeshipRepository;
     }
 
     public List<AnnouncementDTO> retrieveAnnouncements(List<Integer> categoryIds, List<Integer> locationIds,
@@ -149,11 +154,15 @@ public class AnnouncementService {
     public Announcement createAnnouncement(AnnouncementCreationDTO newAnnouncement, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client foundClient = findClientOrThrow(email);
-        Location foundLocation = findLocationOrThrow(newAnnouncement.getLocationId());
+        City foundCity = findCityOrThrow(newAnnouncement.getCityId());
+        Voivodeship foundVoivodeship = findVoivodeshipOrThrow(newAnnouncement.getVoivodeshipId());
         List<Category> foundCategories = findCategories(newAnnouncement.getCategoryIds());
 
+        Location newLocation = new Location(foundCity, foundVoivodeship, newAnnouncement.getLatitude(),
+                newAnnouncement.getLongitude(), true);
+
         Announcement announcementToSave =
-                new Announcement(foundClient, foundLocation, newAnnouncement.getTitle(),
+                new Announcement(foundClient, locationRepository.save(newLocation), newAnnouncement.getTitle(),
                         newAnnouncement.getDescription(), new HashSet<>(foundCategories));
 
         return announcementRepository.save(announcementToSave);
@@ -163,11 +172,18 @@ public class AnnouncementService {
                                            HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client supposedAuthor = findClientOrThrow(email);
-        Location foundLocation = findLocationOrThrow(updatedAnnouncement.getLocationId());
         Announcement foundAnnouncement = findAnnouncementOrThrow(announcementId);
 
         if (foundAnnouncement.getAuthor().equals(supposedAuthor)) {
-            foundAnnouncement.setLocation(foundLocation);
+            Location existingLocation = foundAnnouncement.getLocation();
+            existingLocation.setCity(findCityOrThrow(updatedAnnouncement.getCityId()));
+            existingLocation.setVoivodeship(findVoivodeshipOrThrow(updatedAnnouncement.getVoivodeshipId()));
+            existingLocation.setIsPostRelated(true);
+            existingLocation.setPoint(new GeometryFactory().createPoint(new Coordinate(
+                    updatedAnnouncement.getLongitude(),
+                    updatedAnnouncement.getLatitude()
+            )));
+            foundAnnouncement.setLocation(locationRepository.save(existingLocation));
             foundAnnouncement.setTitle(updatedAnnouncement.getTitle());
             foundAnnouncement.setDescription(updatedAnnouncement.getDescription());
             foundAnnouncement.setCategories(new HashSet<>(findCategories(updatedAnnouncement.getCategoryIds())));
@@ -201,6 +217,16 @@ public class AnnouncementService {
     public Location findLocationOrThrow(Integer locationId) {
         return locationRepository.findById(locationId).orElseThrow(
                 () -> new NoSuchElementException("A location with id: " + locationId + " does not exist."));
+    }
+
+    public City findCityOrThrow(Integer cityId) {
+        return cityRepository.findById(cityId).orElseThrow(
+                () -> new NoSuchElementException("A city with id: " + cityId + " does not exist."));
+    }
+
+    public Voivodeship findVoivodeshipOrThrow(Integer voivodeshipId) {
+        return voivodeshipRepository.findById(voivodeshipId).orElseThrow(
+                () -> new NoSuchElementException("A voivodeship with id: " + voivodeshipId + " does not exist."));
     }
 
     public Client findClientOrThrow(String email) {

@@ -11,15 +11,24 @@ import java.util.Set;
 @Data
 public class MeetingCreationDTO {
     @NotNull
-    private Integer locationId;
-
-    @NotNull
     @Size(min = 5, max = 50)
     private String title;
 
     @NotNull
     @Size(min = 1, max = 250)
     private String description;
+
+    @NotNull
+    private Integer cityId;
+
+    @NotNull
+    private Integer voivodeshipId;
+
+    @NotNull
+    private Double latitude;
+
+    @NotNull
+    private Double longitude;
 
     @NotEmpty
     private Set<Integer> categoryIds;

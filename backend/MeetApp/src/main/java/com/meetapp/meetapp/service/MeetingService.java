@@ -3,14 +3,13 @@ package com.meetapp.meetapp.service;
 import com.meetapp.meetapp.configuration.Constants;
 import com.meetapp.meetapp.dto.*;
 import com.meetapp.meetapp.model.*;
-import com.meetapp.meetapp.repository.CategoryRepository;
-import com.meetapp.meetapp.repository.ClientRepository;
-import com.meetapp.meetapp.repository.LocationRepository;
-import com.meetapp.meetapp.repository.MeetingRepository;
+import com.meetapp.meetapp.repository.*;
 import com.meetapp.meetapp.security.SessionManager;
 import com.meetapp.meetapp.specification.MeetingSpecifications;
 import jakarta.servlet.http.HttpSession;
 import lombok.val;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,13 +28,18 @@ public class MeetingService {
     private final LocationRepository locationRepository;
     private final ClientRepository clientRepository;
     private final CategoryRepository categoryRepository;
+    private final CityRepository cityRepository;
+    private final VoivodeshipRepository voivodeshipRepository;
 
     public MeetingService(MeetingRepository meetingRepository, LocationRepository locationRepository,
-                          ClientRepository clientRepository, CategoryRepository categoryRepository) {
+                          ClientRepository clientRepository, CategoryRepository categoryRepository,
+                          CityRepository cityRepository, VoivodeshipRepository voivodeshipRepository) {
         this.meetingRepository = meetingRepository;
         this.locationRepository = locationRepository;
         this.clientRepository = clientRepository;
         this.categoryRepository = categoryRepository;
+        this.cityRepository = cityRepository;
+        this.voivodeshipRepository = voivodeshipRepository;
     }
 
     public List<MeetingDTO> retrieveMeetings(List<Integer> categoryIds, List<Integer> locationIds,
@@ -124,14 +128,18 @@ public class MeetingService {
     public Meeting createMeeting(MeetingCreationDTO newMeeting, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Instant castedDate = parseDateOrThrow(newMeeting.getMeetingDate());
-        Location foundLocation = findLocationOrThrow(newMeeting.getLocationId());
+        City foundCity = findCityOrThrow(newMeeting.getCityId());
+        Voivodeship foundVoivodeship = findVoivodeshipOrThrow(newMeeting.getVoivodeshipId());
         Client foundClient = findClientOrThrow(email);
         List<Category> foundCategories = findCategories(newMeeting.getCategoryIds());
 
         timeInFutureOrThrow(castedDate);
         personQuotaPositiveOrThrow(newMeeting.getPersonQuota());
 
-        Meeting meetingToSave = new Meeting(foundClient, foundLocation, newMeeting.getTitle(),
+        Location newLocation = new Location(foundCity, foundVoivodeship, newMeeting.getLatitude(),
+                newMeeting.getLongitude(), true);
+
+        Meeting meetingToSave = new Meeting(foundClient, locationRepository.save(newLocation), newMeeting.getTitle(),
                 newMeeting.getDescription(), castedDate, new HashSet<>(foundCategories), newMeeting.getPersonQuota());
 
         return meetingRepository.save(meetingToSave);
@@ -140,7 +148,6 @@ public class MeetingService {
     public Meeting updateMeeting(Integer meetingId, MeetingCreationDTO updatedMeeting, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client supposedAuthor = findClientOrThrow(email);
-        Location foundLocation = findLocationOrThrow(updatedMeeting.getLocationId());
         Meeting foundMeeting = findMeetingOrThrow(meetingId);
         Instant parsedDate = parseDateOrThrow(updatedMeeting.getMeetingDate());
 
@@ -148,11 +155,20 @@ public class MeetingService {
         personQuotaPositiveOrThrow(updatedMeeting.getPersonQuota());
 
         if (foundMeeting.getAuthor().equals(supposedAuthor)) {
+            Location existingLocation = foundMeeting.getLocation();
+            existingLocation.setCity(findCityOrThrow(updatedMeeting.getCityId()));
+            existingLocation.setVoivodeship(findVoivodeshipOrThrow(updatedMeeting.getVoivodeshipId()));
+            existingLocation.setIsPostRelated(true);
+            existingLocation.setPoint(new GeometryFactory().createPoint(new Coordinate(
+                    updatedMeeting.getLongitude(),
+                    updatedMeeting.getLatitude()
+            )));
+
             foundMeeting.setTitle(updatedMeeting.getTitle());
             foundMeeting.setMeetingDate(parsedDate);
             foundMeeting.setPersonQuota(updatedMeeting.getPersonQuota());
             foundMeeting.setDescription(updatedMeeting.getDescription());
-            foundMeeting.setLocation(foundLocation);
+            foundMeeting.setLocation(locationRepository.save(existingLocation));
             foundMeeting.setCategories(new HashSet<>(findCategories(updatedMeeting.getCategoryIds())));
             return meetingRepository.save(foundMeeting);
         } else {
@@ -183,6 +199,16 @@ public class MeetingService {
     public Location findLocationOrThrow(Integer locationId) {
         return locationRepository.findById(locationId).orElseThrow(
                 () -> new NoSuchElementException("A location with id: " + locationId + " does not exist."));
+    }
+
+    public City findCityOrThrow(Integer cityId) {
+        return cityRepository.findById(cityId).orElseThrow(
+                () -> new NoSuchElementException("A city with id: " + cityId + " does not exist."));
+    }
+
+    public Voivodeship findVoivodeshipOrThrow(Integer voivodeshipId) {
+        return voivodeshipRepository.findById(voivodeshipId).orElseThrow(
+                () -> new NoSuchElementException("A voivodeship with id: " + voivodeshipId + " does not exist."));
     }
 
     public Client findClientOrThrow(String email) {

@@ -6,6 +6,8 @@ export const sortingOption = writable(1);
 export const nameSearchParam = writable(null);
 export const userDetails = writable(null);
 export const haveUnreadMessage = writable(false);
+export const selectedLatitude = writable(0);
+export const selectedLongitude = writable(0);
 
 export function clearFilters() {
     filteredCategoryIds.set([]);

@@ -67,7 +67,7 @@
 </script>
 
 <div class="h-screen">
-    <Header pageType="meetings" />
+    <Header pageType="main" />
     <div use:mapAction class="h-[calc(100%-8rem)] lg:h-[calc(100%-4rem)]" />
-    <Footer pageType="meetings" />
+    <Footer pageType="main" />
 </div>
