@@ -9,9 +9,29 @@
 
     let map;
     let mapMarkers = null;
+    let usersLatitude = null;
+    let usersLongitude = null;
+
+    navigator.geolocation.getCurrentPosition((pos) => {
+        usersLatitude = pos.coords.latitude;
+        usersLongitude = pos.coords.longitude;
+    });
+
+    if (usersLatitude === null || usersLongitude === null) {
+        console.log('Geolocation is not supported by this browser.');
+        fetch(`http://ip-api.com/json/`)
+            .then((r) => r.json())
+            .then((r) => {
+                console.log(r);
+                usersLatitude = r.lat;
+                usersLongitude = r.lon;
+                console.log(usersLatitude);
+            });
+    }
 
     function createMap(container) {
-        let m = L.map(container).setView([51.107883, 17.038538], 13);
+        let m = L.map(container).setView([usersLatitude, usersLongitude], 13);
+        L.marker([usersLatitude, usersLongitude]).addTo(m);
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
             attribution: `&copy;<a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>,
           &copy;<a href="https://carto.com/attributions" target="_blank">CARTO</a>`,
@@ -68,6 +88,8 @@
 
 <div class="h-screen">
     <Header pageType="main" />
-    <div use:mapAction class="h-[calc(100%-8rem)] lg:h-[calc(100%-4rem)]" />
+    {#if usersLatitude !== null && usersLongitude !== null}
+        <div use:mapAction class="h-[calc(100%-8rem)] lg:h-[calc(100%-4rem)]" />
+    {/if}
     <Footer pageType="main" />
 </div>
