@@ -67,6 +67,13 @@
         >
             <span class={pageType === 'events' ? 'text-ivory' : 'text-cocoa'}>Wydarzenia</span>
         </div>
+        <div
+            class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl"
+            on:click={() => (window.location.href = 'http://localhost:5173/map')}
+            on:keydown={() => (window.location.href = 'http://localhost:5173/map')}
+        >
+            <span class={pageType === 'main' ? 'text-ivory' : 'text-cocoa'}>Mapa</span>
+        </div>
     </div>
     <div class="block lg:hidden w-12" />
     <div class="hidden lg:block lg:relative lg:flex lg:flex-row lg:justify-end lg:w-1/5">

@@ -9,6 +9,7 @@
     import MdAnnouncement from 'svelte-icons/md/MdAnnouncement.svelte';
     import MdMessage from 'svelte-icons/md/MdMessage.svelte';
     import MdPerson from 'svelte-icons/md/MdPerson.svelte';
+    import FaMapMarkedAlt from 'svelte-icons/fa/FaMapMarkedAlt.svelte';
 
     import { horizontalSlide } from './horizontalSlide';
     import { userDetails, haveUnreadMessage } from '../stores';
@@ -82,6 +83,16 @@
                 <MeetingSymbol />
             </div>
             <div class="text-taupe">Spotkania</div>
+        </div>
+        <div
+            class="flex flex-row mb-2 items-center hover:cursor-pointer"
+            on:click={() => (window.location.href = 'http://localhost:5173/map')}
+            on:keydown={() => (window.location.href = 'http://localhost:5173/map')}
+        >
+            <div class="h-8 w-8 mr-2 text-taupe">
+                <FaMapMarkedAlt />
+            </div>
+            <div class="text-taupe">Mapa</div>
         </div>
         {#if $userDetails !== null}
             <div class="h-px w-[90%] my-2 ml-auto mr-auto bg-black bg-opacity-10" />
