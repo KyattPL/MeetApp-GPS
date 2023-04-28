@@ -17,4 +17,7 @@ public interface LocationRepository extends JpaRepository<Location, Integer> {
 
     @Query("select l from Location l where within(l.point,:filter) = true")
     List<Location> findWithin(Geometry filter);
+
+    @Query("select l from Location l where st_distancesphere(l.point, st_makepoint(:longitude, :latitude)) <= :radius")
+    List<Location> findWithinRadius(double longitude, double latitude, double radius);
 }
