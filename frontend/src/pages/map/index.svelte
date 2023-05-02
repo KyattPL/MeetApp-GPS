@@ -30,7 +30,7 @@
         areEventsOn;
         areAnnouncementsOn;
         areMeetingsOn;
-        isRadiusFilterOn;
+        radiusInMeters;
         closedPopup;
         if (map !== null && !isRadiusFilterOn) {
             getLocationsBox();

@@ -47,7 +47,7 @@ public class LocationService {
         };
 
         Polygon box = geometryFactory.createPolygon(coords);
-        List<Location> foundLocs = locationRepository.findWithin(box).stream().filter(Location::getIsPostRelated).toList();
+        List<Location> foundLocs = locationRepository.findWithin(box);
         List<Post> foundPosts = new ArrayList<>();
 
         if (areEventsOn) {
@@ -68,7 +68,7 @@ public class LocationService {
     public List<Post> retrieveLocationsInCircle(Double latitude, Double longitude, Boolean areEventsOn,
                                                 Boolean areMeetingsOn, Boolean areAnnouncementsOn, Double maxRange) {
 
-        List<Location> foundLocs = locationRepository.findWithinRadius(longitude, latitude, maxRange).stream().filter(Location::getIsPostRelated).toList();
+        List<Location> foundLocs = locationRepository.findWithinRadius(longitude, latitude, maxRange);
         List<Post> foundPosts = new ArrayList<>();
 
         if (areEventsOn) {

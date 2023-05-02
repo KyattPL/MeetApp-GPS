@@ -138,6 +138,18 @@ public class SampleDataLoader implements ApplicationRunner {
                         "Już od 10 minut tu siedzę a dalej nie widziałem żadnego leśnika. Słychać tylko jakąś żabę. " +
                                 "Mój oponent ma dużo więcej złota, a to wszystko przez różnicę dżungli. POMOCY P.S> " +
                                 "Wszyscy oprócz Shyvanny ;>",
+                        getCategories(new HashSet<>(Arrays.asList(1, 3)))),
+                new Announcement(getClientOrThrow("meetapp.zpi@gmail.com"),
+                        locationRepository.save(newLocation("Wrocław", "dolnośląskie", 51.05585, 17.07153, true)), "Testowe Ogłoszenie 2",
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ut elit metus. Ut vel urna " +
+                                "fermentum, elementum neque quis, malesuada ante. Donec vehicula dui vitae tincidunt " +
+                                "venenatis. Curabitur orci.",
+                        getCategories(new HashSet<>(Arrays.asList(1, 3)))),
+                new Announcement(getClientOrThrow("meetapp.zpi@gmail.com"),
+                        locationRepository.save(newLocation("Wrocław", "dolnośląskie", 51.12585, 17.05153, true)), "Testowe Ogłoszenie 3",
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ut elit metus. Ut vel urna " +
+                                "fermentum, elementum neque quis, malesuada ante. Donec vehicula dui vitae tincidunt " +
+                                "venenatis. Curabitur orci.",
                         getCategories(new HashSet<>(Arrays.asList(1, 3)))));
     }
 

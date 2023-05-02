@@ -15,9 +15,9 @@ public interface LocationRepository extends JpaRepository<Location, Integer> {
 
     List<Location> findDistinctTop10ByIsPostRelatedFalseAndCityNameContainingIgnoreCaseOrderById(String cityName);
 
-    @Query("select l from Location l where within(l.point,:filter) = true")
+    @Query("select l from Location l where l.isPostRelated = true and within(l.point,:filter) = true")
     List<Location> findWithin(Geometry filter);
 
-    @Query("select l from Location l where st_distancesphere(l.point, st_makepoint(:longitude, :latitude)) <= :radius")
+    @Query("select l from Location l where l.isPostRelated = true and st_distancesphere(l.point, st_makepoint(:longitude, :latitude)) <= :radius")
     List<Location> findWithinRadius(double longitude, double latitude, double radius);
 }
