@@ -22,6 +22,7 @@
 
     let isRadiusFilterOn = false;
     let radiusInMeters = '0';
+    let circle = null;
 
     let closedPopup = false;
 
@@ -165,6 +166,12 @@
 
     function selectedRadius() {
         isRadiusFilterOn = radiusInMeters != '0';
+
+        if (circle !== null) {
+            circle.remove();
+        }
+
+        circle = L.circle([usersLatitude, usersLongitude], { radius: radiusInMeters }).addTo(map);
     }
 </script>
 
