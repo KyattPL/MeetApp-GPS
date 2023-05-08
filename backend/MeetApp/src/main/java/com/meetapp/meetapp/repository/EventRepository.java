@@ -2,6 +2,7 @@ package com.meetapp.meetapp.repository;
 
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Event;
+import com.meetapp.meetapp.model.Location;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -13,4 +14,6 @@ public interface EventRepository extends JpaRepository<Event, Integer>, JpaSpeci
     Boolean existsByIdIsAndEnrolleesContains(Integer eventId, Client enrollee);
 
     List<Event> findAllByIsActiveIs(Boolean isActive);
+
+    List<Event> findAllByLocationIn(List<Location> locations);
 }
