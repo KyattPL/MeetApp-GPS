@@ -25,7 +25,7 @@
     };
 </script>
 
-<div class="z-20 h-screen flex flex-col w-2/3 fixed top-0 left-0" transition:horizontalSlide>
+<div class="z-[99999] h-screen flex flex-col w-2/3 fixed top-0 left-0" transition:horizontalSlide>
     {#if $userDetails !== null}
         <div class="bg-grass text-ivory flex h-32 items-end">
             <a href={$url('/profile')} class="flex flex-row items-end">
@@ -95,7 +95,7 @@
             <div class="text-taupe">Mapa</div>
         </div>
         {#if $userDetails !== null}
-            <div class="h-px w-[90%] my-2 ml-auto mr-auto bg-black bg-opacity-10" />
+            <div class="h-px w-[90%] my-2 ml-auto mr-auto z-[99998] bg-black bg-opacity-10" />
             <div
                 class="flex flex-row mb-2 items-center hover:cursor-pointer"
                 on:click={() => $redirect('/profile')}
