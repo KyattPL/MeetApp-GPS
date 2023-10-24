@@ -91,7 +91,7 @@
         });
     };
 
-    const socket = io('http://localhost:3000', {
+    const socket = io('http://74.234.48.140:3000', {
         path: '/websockets',
         autoConnect: false
     });

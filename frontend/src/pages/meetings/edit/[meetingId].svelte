@@ -269,7 +269,7 @@ transition ease-in-out delay-300 font-bold border-2 border-cocoa px-4 py-2 trans
                     <div class="bg-tea mx-1.5 my-4 p-2 rounded-lg">
                         <div id="cityInputBox">
                             <SelectCityInput
-                                fetch="http://localhost:8080/api/locationsNonPost?nameSearch=[query]"
+                                fetch="http://74.234.48.140:8080/api/locationsNonPost?nameSearch=[query]"
                                 placeholder="Miasto"
                                 inputId="citySelect"
                                 bind:selected={cityValue}
