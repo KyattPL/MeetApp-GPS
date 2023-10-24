@@ -23,6 +23,7 @@
 
             return await response.json();
         });
+
         const userInterests = await execute(`users/${userId}/categories`, 'GET').then(async (response) => {
             if (!response.ok) {
                 $redirect('/login');

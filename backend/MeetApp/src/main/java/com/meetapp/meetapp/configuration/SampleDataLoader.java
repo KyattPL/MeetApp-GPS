@@ -161,31 +161,31 @@ public class SampleDataLoader implements ApplicationRunner {
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas a lacus interdum, pulvinar" +
                                 " ex a, luctus nulla. Orci varius natoque penatibus et magnis dis parturient montes, " +
                                 "nascetur ridiculus mus. Quisque facilisis lectus ac vulputate turpis duis.",
-                        Instant.parse("2023-02-25T21:37:00.000Z"), getCategories(new HashSet<>(Arrays.asList(1, 3))),
+                        Instant.parse("2024-02-25T21:37:00.000Z"), getCategories(new HashSet<>(Arrays.asList(1, 3))),
                         200),
                 new Meeting(getClientOrThrow("fanatyk.rolkarstwa@rolki.pl"),
                         locationRepository.save(newLocation("Wrocław", "dolnośląskie", 51.10585, 17.04153, true)),
                         "Nocny przejazd przez centrum Wrocławia w styczniu.",
                         "Kochani zapraszam Was na epicki przejazd centrum Wrocławia w Czwartek 24 listopada!!! 💪💪🚩💯 " +
                                 "Zaczynamy o 20:50. Czołówki obowiązkowe ;) Zbiórka przed NFM.",
-                        Instant.parse("2022-11-24T20:50:00.000Z"), getCategories(new HashSet<>(Arrays.asList(3))), 35),
+                        Instant.parse("2024-11-24T20:50:00.000Z"), getCategories(new HashSet<>(Arrays.asList(3))), 35),
                 new Meeting(getClientOrThrow("prawdziwy.polityk@prawdziwysejm.gov.pl"),
                         locationRepository.save(newLocation("Białystok", "podlaskie", 53.18722, 23.14316, true)), "Wiec Wyborczy! W grudniu",
                         "Po pierwsze: policja na ulice. I koniecznie zmienię im mundury, bo te niebieskie nie " +
                                 "podobają mi się. Po drugie: zakłady muszą powstać państwowe, a nie zagraniczne. " +
                                 "Wszyscy ludzie muszą mieć chleb, żeby nie głodowali. Rynek.",
-                        Instant.parse("2022-12-20T12:30:00.000Z"), getCategories(new HashSet<>(Arrays.asList(2, 4)))),
+                        Instant.parse("2024-12-20T12:30:00.000Z"), getCategories(new HashSet<>(Arrays.asList(2, 4)))),
                 new Meeting(getClientOrThrow("janusz75@buziaczek.pl"), locationRepository.save(newLocation("Wrocław", "dolnośląskie",
                         51.10586, 17.04153, true)),
                         "Wielki połów karpia w martwej Odrze, 23 grudnia",
                         "W odrze dzięki śnięciu ryb bardzo łatwo teraz złapać pysznego karpika na wigilijny stół. " +
                                 "Umówmy się na 17:00 na łowienie. Już czuję ten smak w ustach.",
-                        Instant.parse("2022-12-23T17:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(5)))),
+                        Instant.parse("2024-12-23T17:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(5)))),
                 new Meeting(getClientOrThrow("palsie@koniu.org"), locationRepository.save(newLocation("Częstochowa", "śląskie",
                         50.90655, 19.40465, true)),
                         "Atak na Niebieskiego Strażnika",
                         "Niebieski strażnik pojawi się w dżungli pierwszego kwietnia o 14:20. Potrzebne 4 osoby aby " +
-                                "go pokonać.", Instant.parse("2023-04-01T14:20:00.000Z"),
+                                "go pokonać.", Instant.parse("2024-04-01T14:20:00.000Z"),
                         getCategories(new HashSet<>(Arrays.asList(2))), 4));
     }
 
@@ -193,10 +193,10 @@ public class SampleDataLoader implements ApplicationRunner {
         Event withPhoto = new Event(getClientOrThrow("palsie@koniu.org"), locationRepository.save(newLocation("Siedlce", "mazowieckie",
                 52.20541, 22.30046, true)),
                 "lorem ipsum title again", "Lorem ipsum dolor sit amet consectetur et description",
-                Instant.parse("2023-06-06T06:06:06.666Z"), Instant.parse("2023-07-07T07:07:07.777Z"),
+                Instant.parse("2024-06-06T06:06:06.666Z"), Instant.parse("2024-07-07T07:07:07.777Z"),
                 getCategories(new HashSet<>(Arrays.asList(1))), 4200);
 
-        withPhoto.setPicture("pictures\\202211\\pietrucha.jpg");
+        withPhoto.setPicture("pictures\\202411\\pietrucha.jpg");
 
         return Arrays.asList(
                 new Event(getClientOrThrow("meetapp.zpi@gmail.com"), locationRepository.save(newLocation("Wrocław", "dolnośląskie",
@@ -390,8 +390,8 @@ public class SampleDataLoader implements ApplicationRunner {
                         " Quisque ac egestas justo. Morbi bibendum dictum tellus, in sagittis libero dapibus ac. Sed " +
                         "cursus " +
                         "nulla sit amet mauris interdum auctor. Nulla ut faucibus turpis. Nullam elementum ante eu " +
-                        "nunc " + "cursus, non dignissim vel vel.", Instant.parse("2022-12-20T10:00:00.000Z"),
-                        Instant.parse("2022-12-22T17:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(1, 3))),
+                        "nunc " + "cursus, non dignissim vel vel.", Instant.parse("2024-12-20T10:00:00.000Z"),
+                        Instant.parse("2024-12-22T17:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(1, 3))),
                         200,
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ligula arcu, pulvinar " +
                                 "eget " +
@@ -495,26 +495,26 @@ public class SampleDataLoader implements ApplicationRunner {
                 new Event(getClientOrThrow("fanatyk.rolkarstwa@rolki.pl"),
                         locationRepository.save(newLocation("Trzebnica", "dolnośląskie", 51.31042, 17.06345, true)),
                         "Powiatowe mistrzostwa \"Najszybszka Rolka Burmistrza M.D. (zbieżność inicjałów przypadkowa) " +
-                                "2023\"",
+                                "2024\"",
                         "W imieniu naszego przewspaniałeg burmistrza pragnę Was serdecznie zaprosić na przyszłoroczne" +
                                 " mistrzostwa \"Najszybsza Rolka Burmistrza M.D. (zbieżność inicjałów przypadkowa) " +
-                                "2023\"! Odbędą się one już w terminie 17-18 maja. Dla wszystkich uczestników " +
+                                "2024\"! Odbędą się one już w terminie 17-18 maja. Dla wszystkich uczestników " +
                                 "przewidziane są nagrody, a dla zwycięzcy - udział w chórku nowej piosenki " +
-                                "Powiatowej!!! 😎🆒 dozo 😁", Instant.parse("2023-05-17T10:00:00.000Z"),
-                        Instant.parse("2023-05-18T16:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(4))), 300,
+                                "Powiatowej!!! 😎🆒 dozo 😁", Instant.parse("2024-05-17T10:00:00.000Z"),
+                        Instant.parse("2024-05-18T16:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(4))), 300,
                         "17.\n10:00 - Uroczyste otwarcie. przecięcie wstęgi przez Pana burmistrza\n11:00 - " +
                                 "Eliminacje\n" +
                                 "14:00 - Ćwierćfinały\n\n18.\n10:00 - Otwarcie dnia\n11:00 - Finały 🏁💪🦾\n14:00 - " +
                                 "Uroczyste" + " przyznanie nagród, poczęstunek 🎂🌭🥂"),
                 new Event(getClientOrThrow("prawdziwy.polityk@prawdziwysejm.gov.pl"),
                         locationRepository.save(newLocation("Szczecin", "zachodniopomorskie", 53.38182, 14.93992, true)), "Lorem ipsum ipsum dolor et cetera",
-                        "A long, detailed description of the event", Instant.parse("2022-12-21T10:00:00.000Z"),
-                        Instant.parse("2022-12-28T22:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(2))), 20,
+                        "A long, detailed description of the event", Instant.parse("2024-12-21T10:00:00.000Z"),
+                        Instant.parse("2024-12-28T22:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(2))), 20,
                         "A schedule describing what's planned for each day of the event."),
                 new Event(getClientOrThrow("janusz75@buziaczek.pl"), locationRepository.save(newLocation("Katowice", "śląskie",
                         50.25385, 18.45384, true)),
                         "lorem ipsum title", "Lorem ipsum dolor sit amet consectetur et description",
-                        Instant.parse("2023-06-06T06:06:06.666Z"), Instant.parse("2023-07-07T07:07:07.777Z"),
+                        Instant.parse("2024-06-06T06:06:06.666Z"), Instant.parse("2024-07-07T07:07:07.777Z"),
                         getCategories(new HashSet<>(Arrays.asList(3))),
                         "Lorem ipsum schedule"),
                 withPhoto);

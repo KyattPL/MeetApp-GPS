@@ -17,7 +17,7 @@
     import execute from '../fetchWrapper';
 
     const logout = () => {
-        execute('logout', 'POST').then((_) => (window.location.href = 'http://localhost:5173'));
+        execute('logout', 'POST').then((_) => (window.location.href = 'http://localhost:8080'));
     };
 
     const myActivities = () => {
@@ -56,8 +56,8 @@
     <div class="h-full bg-ivory text-pine p-4">
         <div
             class="flex flex-row mb-2 items-center hover:cursor-pointer"
-            on:click={() => (window.location.href = 'http://localhost:5173/events')}
-            on:keydown={() => (window.location.href = 'http://localhost:5173/events')}
+            on:click={() => (window.location.href = 'http://localhost:8080/events')}
+            on:keydown={() => (window.location.href = 'http://localhost:8080/events')}
         >
             <div class="h-8 w-8 mr-2 text-taupe">
                 <FaCalendarDay />
@@ -66,8 +66,8 @@
         </div>
         <div
             class="flex flex-row mb-2 items-center hover:cursor-pointer"
-            on:click={() => (window.location.href = 'http://localhost:5173/announcements')}
-            on:keydown={() => (window.location.href = 'http://localhost:5173/announements')}
+            on:click={() => (window.location.href = 'http://localhost:8080/announcements')}
+            on:keydown={() => (window.location.href = 'http://localhost:8080/announements')}
         >
             <div class="h-8 w-8 mr-2 text-taupe">
                 <MdAnnouncement />
@@ -76,8 +76,8 @@
         </div>
         <div
             class="flex flex-row mb-2 items-center hover:cursor-pointer"
-            on:click={() => (window.location.href = 'http://localhost:5173/meetings')}
-            on:keydown={() => (window.location.href = 'http://localhost:5173/meetings')}
+            on:click={() => (window.location.href = 'http://localhost:8080/meetings')}
+            on:keydown={() => (window.location.href = 'http://localhost:8080/meetings')}
         >
             <div class="h-8 w-8 mr-2 text-taupe">
                 <MeetingSymbol />
@@ -86,8 +86,8 @@
         </div>
         <div
             class="flex flex-row mb-2 items-center hover:cursor-pointer"
-            on:click={() => (window.location.href = 'http://localhost:5173/map')}
-            on:keydown={() => (window.location.href = 'http://localhost:5173/map')}
+            on:click={() => (window.location.href = 'http://localhost:8080/map')}
+            on:keydown={() => (window.location.href = 'http://localhost:8080/map')}
         >
             <div class="h-8 w-8 mr-2 text-taupe">
                 <FaMapMarkedAlt />

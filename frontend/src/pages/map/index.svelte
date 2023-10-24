@@ -83,10 +83,11 @@
 
         closedPopup = false;
 
+        let customIcon = L.icon({ iconUrl: 'marker-user.png', iconSize: [25, 42] });
         let newMarkers = [];
         markerData.forEach((loc) => {
             console.log(loc);
-            let newMarker = L.marker(loc.location.point.coordinates.reverse(), { interactive: true });
+            let newMarker = L.marker(loc.location.point.coordinates.reverse(), { interactive: true, icon: customIcon });
             newMarker
                 .on('click', (e) => {
                     newMarker.bindPopup(createPopup(loc));
