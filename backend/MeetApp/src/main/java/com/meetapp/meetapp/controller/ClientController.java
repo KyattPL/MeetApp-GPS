@@ -93,11 +93,9 @@ public class ClientController {
     public void createUserAccount(HttpSession session, HttpServletResponse response) throws IOException {
         Boolean isNewAccount = clientService.createClientAccount(session);
         if (isNewAccount) {
-            response.sendRedirect("http://\n" +
-                    "meetapp.northeurope.cloudapp.azure.com:8080/chooseCategories");
+            response.sendRedirect("http://meetapp.northeurope.cloudapp.azure.com:8080/chooseCategories");
         } else {
-            response.sendRedirect("http://\n" +
-                    "meetapp.northeurope.cloudapp.azure.com:8080");
+            response.sendRedirect("http://meetapp.northeurope.cloudapp.azure.com:8080");
         }
     }
 
