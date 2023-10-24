@@ -2,7 +2,7 @@
     import { url } from '@roxi/routify';
 
     const gotoToGoogleLogin = () => {
-        window.location.href = 'http://74.234.48.140:8080/oauth2/authorization/google';
+        window.location.href = 'http://meetapp.northeurope.cloudapp.azure.com:8080/oauth2/authorization/google';
     };
 </script>
 

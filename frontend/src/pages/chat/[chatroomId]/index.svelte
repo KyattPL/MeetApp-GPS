@@ -91,7 +91,7 @@
         });
     };
 
-    const socket = io('http://74.234.48.140:3000', {
+    const socket = io('http://meetapp.northeurope.cloudapp.azure.com:3000', {
         path: '/websockets',
         autoConnect: false
     });
