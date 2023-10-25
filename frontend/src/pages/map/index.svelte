@@ -83,7 +83,7 @@
 
         closedPopup = false;
 
-        let customIcon = L.icon({ iconUrl: 'marker-user.png', iconSize: [25, 42] });
+        let customIcon = L.icon({ iconUrl: 'marker-other.png', iconSize: [25, 42] });
         let newMarkers = [];
         markerData.forEach((loc) => {
             console.log(loc);
