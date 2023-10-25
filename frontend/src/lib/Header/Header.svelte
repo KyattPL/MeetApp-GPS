@@ -72,7 +72,7 @@
             on:click={() => (window.location.href = 'http://meetapp.northeurope.cloudapp.azure.com:8080/map')}
             on:keydown={() => (window.location.href = 'http://meetapp.northeurope.cloudapp.azure.com:8080/map')}
         >
-            <span class={pageType === 'main' ? 'text-ivory' : 'text-cocoa'}>Mapa</span>
+            <span class={pageType === 'map' ? 'text-ivory' : 'text-cocoa'}>Mapa</span>
         </div>
     </div>
     <div class="block lg:hidden w-12" />

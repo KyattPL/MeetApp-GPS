@@ -177,7 +177,7 @@
 </script>
 
 <div class="h-screen">
-    <Header pageType="main" />
+    <Header pageType="map" />
     <div class="absolute z-[9999] top-20 right-6">
         <svg
             class="text-white bg-pine absolute top-0 right-0 m-2 pointer-events-none p-2 rounded"
