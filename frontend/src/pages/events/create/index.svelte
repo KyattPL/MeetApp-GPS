@@ -275,7 +275,7 @@
 
     function mapAction(container) {
         map = createMap(container);
-        let customIcon = L.icon({ iconUrl: 'marker-user.png', iconSize: [25, 42] });
+        let customIcon = L.icon({ iconUrl: '../marker-user.png', iconSize: [25, 42] });
 
         marker = L.marker(map.getCenter(), {
             draggable: true,
