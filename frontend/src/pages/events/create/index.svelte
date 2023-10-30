@@ -183,7 +183,7 @@
 
     const validateTitle = () => {
         let errorMessage = document.getElementById('titleErrorMsg');
-        if ($title === null || $title.length < 5 || $title.length > 100) {
+        if (title === null || title.length < 5 || title.length > 100) {
             errorMessage.classList.remove('hidden');
             return false;
         }
