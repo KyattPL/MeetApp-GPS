@@ -53,7 +53,9 @@
             cityValue = {
                 id: r.location.id,
                 city: r.location.city.name,
+                cityId: r.location.city.id,
                 voivodeship: r.location.voivodeship.name,
+                voivodeshipId: r.location.voivodeship.id,
                 lat: r.location.point.coordinates[1],
                 lng: r.location.point.coordinates[0]
             };
@@ -125,10 +127,11 @@
     };
 
     const handleSubmit = () => {
+        console.log(cityValue);
         if (validateTitle() && validateCategory() && validateCity() && validateSpot() && validateDescription()) {
             let requestBody = {
-                cityId: cityValue.city.id,
-                voivodeshipId: cityValue.voivodeship.id,
+                cityId: cityValue.cityId,
+                voivodeshipId: cityValue.voivodeshipId,
                 latitude: $selectedLatitude,
                 longitude: $selectedLongitude,
                 title: title,
