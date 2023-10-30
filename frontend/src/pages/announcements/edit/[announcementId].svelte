@@ -131,7 +131,6 @@
                 voivodeshipId: cityValue.voivodeship.id,
                 latitude: $selectedLatitude,
                 longitude: $selectedLongitude,
-                locationId: cityValue.id,
                 title: title,
                 description: descriptionValue,
                 categoryIds: categoryValue
