@@ -20,7 +20,7 @@
     import { userDetails, selectedLatitude, selectedLongitude } from '../../../lib/stores';
     import calculateDistanceBetweenCoords from '../../../lib/utils';
 
-    let title;
+    let title = null;
     let isSpotPickerActive = false;
 
     let categories = [];
@@ -203,18 +203,18 @@
             validateSchedule()
         ) {
             let multipartImage = new FormData();
-            multipartImage.append('cityId', cityValue.city.id);
-            multipartImage.append('voivodeshipId', cityValue.voivodeship.id);
+            multipartImage.append('cityId', $cityValue.city.id);
+            multipartImage.append('voivodeshipId', $cityValue.voivodeship.id);
             multipartImage.append('latitude', $selectedLatitude.toString());
             multipartImage.append('longitude', $selectedLongitude.toString());
-            multipartImage.append('locationId', cityValue.id);
-            multipartImage.append('title', title);
-            multipartImage.append('description', descriptionValue);
-            multipartImage.append('schedule', scheduleValue);
-            multipartImage.append('categoryIds', categoryValue);
-            multipartImage.append('startDate', startIsoDateTime);
-            multipartImage.append('endDate', endIsoDateTime);
-            multipartImage.append('personQuota', peopleLimitValue);
+            multipartImage.append('locationId', $cityValue.id);
+            multipartImage.append('title', $title);
+            multipartImage.append('description', $descriptionValue);
+            multipartImage.append('schedule', $scheduleValue);
+            multipartImage.append('categoryIds', $categoryValue);
+            multipartImage.append('startDate', $startIsoDateTime);
+            multipartImage.append('endDate', $endIsoDateTime);
+            multipartImage.append('personQuota', $peopleLimitValue);
             multipartImage.append('picture', blob);
 
             $selectedLongitude = 0;
