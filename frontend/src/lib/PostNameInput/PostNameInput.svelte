@@ -1,39 +1,11 @@
 <script lang="ts">
-    export let placeholder = 'Nazwa posta';
-    let isValidated = false;
-
-    export let postName = null;
-    export let isValid = true;
+    export let placeholder;
     export let maxLength = 0;
-
-    let errorMessage = null;
-
-    export const getIsValid = () => {
-        isValidated = true;
-        return isValid;
-    };
-
-    export const getPostName = () => {
-        return postName;
-    };
+    export let value;
 
     $: {
-        if (errorMessage !== null) {
-            if (postName !== null && postName.length > maxLength) {
-                postName = postName.slice(0, maxLength);
-            }
-
-            if (postName === null || postName.length < 5) {
-                isValid = false;
-
-                if (isValidated) {
-                    errorMessage.classList.remove('hidden');
-                }
-            } else {
-                isValid = true;
-
-                errorMessage.className += ' hidden';
-            }
+        if (value !== null && value.length > maxLength) {
+            value = value.slice(0, maxLength);
         }
     }
 </script>
@@ -47,7 +19,6 @@
     focus:outline-none focus:border-pickle focus:ring-1 focus:ring-pickle focus:text-cocoa"
         {placeholder}
         required
-        bind:value={postName}
+        bind:value
     />
-    <p class="hidden peer-invalid:block text-red-500 text-sm mx-4" id="titleErrorMsg" bind:this={errorMessage}>Nazwa musi mieć minimum 5 znaków</p>
 </div>
