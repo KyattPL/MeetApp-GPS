@@ -54,8 +54,8 @@
                 id: r.location.id,
                 city: r.location.city.name,
                 voivodeship: r.location.voivodeship.name,
-                lat: r.location.point.cooridnates[0],
-                lng: r.location.point.cooridnates[1]
+                lat: r.location.point.coordinates[1],
+                lng: r.location.point.coordinates[0]
             };
 
             $selectedLatitude = cityValue.lat;
