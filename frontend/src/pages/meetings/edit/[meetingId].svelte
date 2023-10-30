@@ -309,7 +309,7 @@ transition ease-in-out delay-300 font-bold border-2 border-cocoa px-4 py-2 trans
                     <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
                 </div>
                 <div class="">
-                    <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={handleSubmit}>Stwórz spotkanie</Button>
+                    <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={handleSubmit}>Zapisz zmiany</Button>
                 </div>
             </div>
         {/await}
