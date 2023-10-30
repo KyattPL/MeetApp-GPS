@@ -198,10 +198,6 @@
     function openSpotPicker() {
         isSpotPickerActive = true;
     }
-
-    $: {
-        cityValue;
-    }
 </script>
 
 {#if isSpotPickerActive}
