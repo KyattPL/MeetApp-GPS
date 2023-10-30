@@ -49,11 +49,18 @@
         .then((r) => {
             descriptionValue = r.description;
             categoryValue = r.categories.map((c) => c.id);
+            console.log(r);
             cityValue = {
                 id: r.location.id,
                 city: r.location.city.name,
-                voivodeship: r.location.voivodeship.name
+                voivodeship: r.location.voivodeship.name,
+                lat: r.location.point.cooridnates[0],
+                lng: r.location.point.cooridnates[1]
             };
+
+            $selectedLatitude = cityValue.lat;
+            $selectedLongitude = cityValue.lng;
+
             title = r.title;
         });
 
@@ -188,6 +195,10 @@
 
     function openSpotPicker() {
         isSpotPickerActive = true;
+    }
+
+    $: {
+        cityValue;
     }
 </script>
 
