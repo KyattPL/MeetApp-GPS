@@ -323,7 +323,7 @@
         <div class="flex flex-col h-[calc(100%-4rem)] lg:w-1/3 lg:mx-auto overflow-auto justify-between items-center bg-ivory">
             <div class="w-full">
                 <PostNameInput placeholder="Nazwa wydarzenia" bind:value={title} maxLength={100} />
-                <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="titleErrorMsg">Tytuł musi mieć min 5 znaków</p>
+                <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="titleErrorMsg">Tytuł musi mieć 5-100 znaków</p>
 
                 <p class="mx-1.5 mb-1 text-lg text-pine">Zdjęcie wydarzenia</p>
                 <div class="flex justify-center">

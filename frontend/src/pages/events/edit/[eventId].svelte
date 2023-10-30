@@ -22,8 +22,7 @@
 
     export let eventId: number;
 
-    let title;
-    let initTitle;
+    let title = null;
     let isSpotPickerActive = false;
 
     let categories = [];
@@ -77,7 +76,7 @@
                 city: r.location.city.name,
                 voivodeship: r.location.voivodeship.name
             };
-            initTitle = r.title;
+            title = r.title;
             peopleLimitValue = r.personQuota === null ? null : r.personQuota;
             scheduleValue = r.schedule;
             startDateValue = r.startDateTime.date.split('.').reverse().join('-');
@@ -214,9 +213,19 @@
         return true;
     };
 
+    const validateTitle = () => {
+        let errorMessage = document.getElementById('titleErrorMsg');
+        if (title === null || title.length < 5 || title.length > 100) {
+            errorMessage.classList.remove('hidden');
+            return false;
+        }
+        errorMessage.className += ' hidden';
+        return true;
+    };
+
     const handleSubmit = async () => {
         if (
-            title.getIsValid() &&
+            validateTitle() &&
             validateCategory() &&
             validateCity() &&
             validateSpot() &&
@@ -231,7 +240,7 @@
             multipartImage.append('latitude', $selectedLatitude.toString());
             multipartImage.append('longitude', $selectedLongitude.toString());
             multipartImage.append('locationId', cityValue.id);
-            multipartImage.append('title', title.getPostName());
+            multipartImage.append('title', title);
             multipartImage.append('description', descriptionValue);
             multipartImage.append('schedule', scheduleValue);
             multipartImage.append('categoryIds', categoryValue);
@@ -342,7 +351,8 @@
         {#await promise then _}
             <div class="flex flex-col h-[calc(100%-4rem)] lg:w-1/3 lg:mx-auto overflow-auto justify-between items-center bg-ivory">
                 <div class="w-full">
-                    <PostNameInput placeholder="Nazwa wydarzenia" bind:this={title} maxLength={100} bind:value={initTitle} />
+                    <PostNameInput placeholder="Nazwa wydarzenia" maxLength={100} bind:value={title} />
+                    <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="titleErrorMsg">Tytuł musi mieć 5-100 znaków</p>
 
                     <p class="mx-1.5 mb-1 text-lg text-pine">Zdjęcie wydarzenia</p>
                     <div class="flex justify-center">

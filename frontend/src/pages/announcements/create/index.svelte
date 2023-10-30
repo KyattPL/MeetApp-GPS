@@ -86,15 +86,25 @@
         return true;
     };
 
+    const validateTitle = () => {
+        let errorMessage = document.getElementById('titleErrorMsg');
+        if (title === null || title.length < 5 || title.length > 50) {
+            errorMessage.classList.remove('hidden');
+            return false;
+        }
+        errorMessage.className += ' hidden';
+        return true;
+    };
+
     const handleSubmit = () => {
-        if (title.getIsValid() && validateCategory() && validateCity() && validateSpot() && validateDescription()) {
+        if (validateTitle() && validateCategory() && validateCity() && validateSpot() && validateDescription()) {
             let requestBody = {
                 cityId: cityValue.city.id,
                 voivodeshipId: cityValue.voivodeship.id,
                 latitude: $selectedLatitude,
                 longitude: $selectedLongitude,
                 locationId: cityValue.id,
-                title: title.getPostName(),
+                title: title,
                 description: descriptionValue,
                 categoryIds: categoryValue
             };
@@ -182,7 +192,9 @@
         <Header />
         <div class="flex flex-col lg:w-1/3 lg:mx-auto h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
             <div class="w-full">
-                <PostNameInput placeholder="Nazwa ogłoszenia" bind:this={title} maxLength={50} />
+                <PostNameInput placeholder="Nazwa ogłoszenia" bind:value={title} maxLength={50} />
+                <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="titleErrorMsg">Tytuł musi mieć 5-50 znaków</p>
+
                 <div class="mx-1.5 mt-2 categorySvelecteBox" id="categoryInputBox">
                     <MultiselectCategoryInput
                         style=""

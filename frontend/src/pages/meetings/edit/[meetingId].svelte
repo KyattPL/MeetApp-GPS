@@ -21,8 +21,7 @@
 
     export let meetingId: number;
 
-    let title;
-    let initTitle;
+    let title = null;
 
     let categories = [];
     let categoryValue = null;
@@ -62,7 +61,7 @@
                 city: r.location.city.name,
                 voivodeship: r.location.voivodeship.name
             };
-            initTitle = r.title;
+            title = r.title;
             peopleLimitValue = r.personQuota === null ? null : r.personQuota;
             dateValue = r.meetingDateTime.date.split('.').reverse().join('-');
             timeValue = r.meetingDateTime.time;
@@ -150,9 +149,19 @@
         return true;
     };
 
+    const validateTitle = () => {
+        let errorMessage = document.getElementById('titleErrorMsg');
+        if (title === null || title.length < 5 || title.length > 50) {
+            errorMessage.classList.remove('hidden');
+            return false;
+        }
+        errorMessage.className += ' hidden';
+        return true;
+    };
+
     const handleSubmit = () => {
         if (
-            title.getIsValid() &&
+            validateTitle() &&
             validateCategory() &&
             validateCity() &&
             validateSpot() &&
@@ -166,7 +175,7 @@
                 latitude: $selectedLatitude,
                 longitude: $selectedLongitude,
                 locationId: cityValue.id,
-                title: title.getPostName(),
+                title: title,
                 description: descriptionValue,
                 categoryIds: categoryValue,
                 meetingDate: isoDateTime,
@@ -257,7 +266,9 @@ transition ease-in-out delay-300 font-bold border-2 border-cocoa px-4 py-2 trans
         {#await promise then _}
             <div class="flex flex-col h-[calc(100%-4rem)] lg:w-1/3 lg:mx-auto overflow-auto justify-between items-center bg-ivory">
                 <div class="w-full">
-                    <PostNameInput placeholder="Nazwa spotkania" bind:this={title} bind:postName={initTitle} maxLength={50} />
+                    <PostNameInput placeholder="Nazwa spotkania" bind:value={title} maxLength={50} />
+                    <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="titleErrorMsg">Tytuł musi mieć 5-50 znaków</p>
+
                     <div class="mx-1.5 mt-2" id="categoryInputBox">
                         <MultiselectCategoryInput
                             style=""
