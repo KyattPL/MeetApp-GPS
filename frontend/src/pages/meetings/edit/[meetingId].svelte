@@ -59,7 +59,11 @@
             cityValue = {
                 id: r.location.id,
                 city: r.location.city.name,
-                voivodeship: r.location.voivodeship.name
+                cityId: r.location.city.id,
+                voivodeship: r.location.voivodeship.name,
+                voivodeshipId: r.location.voivodeship.id,
+                lat: r.location.point.coordinates[1],
+                lng: r.location.point.coordinates[0]
             };
             title = r.title;
             peopleLimitValue = r.personQuota === null ? null : r.personQuota;
@@ -170,11 +174,10 @@
             validateDescription()
         ) {
             let requestBody = {
-                cityId: cityValue.city.id,
-                voivodeshipId: cityValue.voivodeship.id,
+                cityId: cityValue.cityId,
+                voivodeshipId: cityValue.voivodeshipId,
                 latitude: $selectedLatitude,
                 longitude: $selectedLongitude,
-                locationId: cityValue.id,
                 title: title,
                 description: descriptionValue,
                 categoryIds: categoryValue,

@@ -49,7 +49,6 @@
         .then((r) => {
             descriptionValue = r.description;
             categoryValue = r.categories.map((c) => c.id);
-            console.log(r);
             cityValue = {
                 id: r.location.id,
                 city: r.location.city.name,
@@ -127,7 +126,6 @@
     };
 
     const handleSubmit = () => {
-        console.log(cityValue);
         if (validateTitle() && validateCategory() && validateCity() && validateSpot() && validateDescription()) {
             let requestBody = {
                 cityId: cityValue.cityId,

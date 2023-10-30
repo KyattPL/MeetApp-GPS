@@ -74,7 +74,11 @@
             cityValue = {
                 id: r.location.id,
                 city: r.location.city.name,
-                voivodeship: r.location.voivodeship.name
+                cityId: r.location.city.id,
+                voivodeship: r.location.voivodeship.name,
+                voivodeshipId: r.location.voivodeship.id,
+                lat: r.location.point.coordinates[1],
+                lng: r.location.point.coordinates[0]
             };
             title = r.title;
             peopleLimitValue = r.personQuota === null ? null : r.personQuota;
@@ -235,11 +239,10 @@
             validateSchedule()
         ) {
             let multipartImage = new FormData();
-            multipartImage.append('cityId', cityValue.city.id);
-            multipartImage.append('voivodeshipId', cityValue.voivodeship.id);
+            multipartImage.append('cityId', cityValue.cityId);
+            multipartImage.append('voivodeshipId', cityValue.voivodeshipId);
             multipartImage.append('latitude', $selectedLatitude.toString());
             multipartImage.append('longitude', $selectedLongitude.toString());
-            multipartImage.append('locationId', cityValue.id);
             multipartImage.append('title', title);
             multipartImage.append('description', descriptionValue);
             multipartImage.append('schedule', scheduleValue);
