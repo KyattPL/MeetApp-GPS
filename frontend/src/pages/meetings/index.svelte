@@ -60,7 +60,7 @@
             urlParams.append('categoryIds', categoryId);
         }
         for (let locationId of $filteredLocationIds) {
-            urlParams.append('locationIds', locationId);
+            urlParams.append('locationIds', locationId.id);
         }
         if ($sortingOption !== null) {
             urlParams.append('sortOption', $sortingOption.toString());
