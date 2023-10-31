@@ -7,7 +7,7 @@ const { Server } = require("socket.io");
 const io = new Server(server, {
     path: '/websockets',
     cors: {
-        origin: 'http://localhost:5173',
+        origin: 'http://meetapp.northeurope.cloudapp.azure.com:8080',
         credentials: true
     }
 });
