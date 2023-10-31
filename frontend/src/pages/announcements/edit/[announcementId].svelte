@@ -51,10 +51,14 @@
             categoryValue = r.categories.map((c) => c.id);
             cityValue = {
                 id: r.location.id,
-                city: r.location.city.name,
-                cityId: r.location.city.id,
-                voivodeship: r.location.voivodeship.name,
-                voivodeshipId: r.location.voivodeship.id,
+                city: {
+                    id: r.location.city.id,
+                    name: r.location.city.name
+                },
+                voivodeship: {
+                    id: r.location.voivodeship.id,
+                    name: r.location.voivodeship.name
+                },
                 lat: r.location.point.coordinates[1],
                 lng: r.location.point.coordinates[0]
             };
@@ -128,8 +132,8 @@
     const handleSubmit = () => {
         if (validateTitle() && validateCategory() && validateCity() && validateSpot() && validateDescription()) {
             let requestBody = {
-                cityId: cityValue.cityId,
-                voivodeshipId: cityValue.voivodeshipId,
+                cityId: cityValue.city.id,
+                voivodeshipId: cityValue.voivodeship.id,
                 latitude: $selectedLatitude,
                 longitude: $selectedLongitude,
                 title: title,
@@ -195,10 +199,6 @@
 
     function openSpotPicker() {
         isSpotPickerActive = true;
-    }
-
-    $: {
-        console.log(cityValue);
     }
 </script>
 

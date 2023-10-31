@@ -73,10 +73,14 @@
             categoryValue = r.categories.map((c) => c.id);
             cityValue = {
                 id: r.location.id,
-                city: r.location.city.name,
-                cityId: r.location.city.id,
-                voivodeship: r.location.voivodeship.name,
-                voivodeshipId: r.location.voivodeship.id,
+                city: {
+                    id: r.location.city.id,
+                    name: r.location.city.name
+                },
+                voivodeship: {
+                    id: r.location.voivodeship.id,
+                    name: r.location.voivodeship.name
+                },
                 lat: r.location.point.coordinates[1],
                 lng: r.location.point.coordinates[0]
             };
@@ -239,8 +243,8 @@
             validateSchedule()
         ) {
             let multipartImage = new FormData();
-            multipartImage.append('cityId', cityValue.cityId);
-            multipartImage.append('voivodeshipId', cityValue.voivodeshipId);
+            multipartImage.append('cityId', cityValue.city.id);
+            multipartImage.append('voivodeshipId', cityValue.voivodeship.id);
             multipartImage.append('latitude', $selectedLatitude.toString());
             multipartImage.append('longitude', $selectedLongitude.toString());
             multipartImage.append('title', title);
