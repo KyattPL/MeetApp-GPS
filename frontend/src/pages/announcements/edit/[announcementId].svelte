@@ -196,6 +196,10 @@
     function openSpotPicker() {
         isSpotPickerActive = true;
     }
+
+    $: {
+        console.log(cityValue);
+    }
 </script>
 
 {#if isSpotPickerActive}
