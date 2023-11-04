@@ -84,6 +84,10 @@
                 lat: r.location.point.coordinates[1],
                 lng: r.location.point.coordinates[0]
             };
+
+            $selectedLatitude = cityValue.lat;
+            $selectedLongitude = cityValue.lng;
+
             title = r.title;
             peopleLimitValue = r.personQuota === null ? null : r.personQuota;
             scheduleValue = r.schedule;

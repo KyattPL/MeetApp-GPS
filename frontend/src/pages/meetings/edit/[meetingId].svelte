@@ -69,13 +69,18 @@
                 lat: r.location.point.coordinates[1],
                 lng: r.location.point.coordinates[0]
             };
+
+            $selectedLatitude = cityValue.lat;
+            $selectedLongitude = cityValue.lng;
+
             title = r.title;
             peopleLimitValue = r.personQuota === null ? null : r.personQuota;
             dateValue = r.meetingDateTime.date.split('.').reverse().join('-');
             timeValue = r.meetingDateTime.time;
-        });
+        })
+        .then(() => execute('categories', 'GET').then((cats) => cats.json()));
 
-    execute('categories', 'GET').then(async (response) => (categories = await response.json()));
+    //execute('categories', 'GET').then(async (response) => (categories = await response.json()));
 
     const validateCategory = () => {
         let errorMsg = document.getElementById('categoryErrorMsg');
