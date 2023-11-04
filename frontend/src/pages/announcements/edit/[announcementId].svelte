@@ -40,10 +40,6 @@
             r === 'false' ? $redirect('/announcements') : null;
         });
 
-    execute('categories', 'GET')
-        .then((r) => r.json())
-        .then((r) => (categories = r));
-
     let promise = execute(`announcements/${announcementId}`, 'GET')
         .then((r) => r.json())
         .then((r) => {
@@ -67,7 +63,8 @@
             $selectedLongitude = cityValue.lng;
 
             title = r.title;
-        });
+        })
+        .then(() => execute('categories', 'GET').then(async (cats) => categories = await cats.json()));
 
     const validateCategory = () => {
         let errorMsg = document.getElementById('categoryErrorMsg');

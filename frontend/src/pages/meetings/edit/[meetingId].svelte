@@ -80,8 +80,6 @@
         })
         .then(() => execute('categories', 'GET').then(async (cats) => categories = await cats.json()));
 
-    //execute('categories', 'GET').then(async (response) => (categories = await response.json()));
-
     const validateCategory = () => {
         let errorMsg = document.getElementById('categoryErrorMsg');
         if (categoryValue === null || categoryValue.length === 0) {
