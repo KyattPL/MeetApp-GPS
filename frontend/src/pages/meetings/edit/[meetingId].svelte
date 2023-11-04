@@ -78,7 +78,7 @@
             dateValue = r.meetingDateTime.date.split('.').reverse().join('-');
             timeValue = r.meetingDateTime.time;
         })
-        .then(() => execute('categories', 'GET').then((cats) => cats.json()));
+        .then(() => execute('categories', 'GET').then(async (cats) => categories = await cats.json()));
 
     //execute('categories', 'GET').then(async (response) => (categories = await response.json()));
 
