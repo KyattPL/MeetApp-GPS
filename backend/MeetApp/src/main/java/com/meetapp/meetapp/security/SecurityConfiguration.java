@@ -16,8 +16,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.requiresChannel().anyRequest().requiresSecure().and()
-                .authorizeRequests()
+        http.authorizeRequests()
                 .anyRequest().permitAll().and()
                 .exceptionHandling(e -> e.authenticationEntryPoint(
                         new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
