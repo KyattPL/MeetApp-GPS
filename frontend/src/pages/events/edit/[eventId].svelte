@@ -64,6 +64,8 @@
         })
         .catch((_) => $redirect('/events'));
 
+    execute('categories', 'GET').then(async (response) => (categories = await response.json()));
+
     let promise = execute(`events/editDetails/${eventId}`, 'GET')
         .then((r) => r.json())
         .then((r) => {
@@ -94,8 +96,7 @@
             endDateValue = r.endDateTime.date.split('.').reverse().join('-');
             endTimeValue = r.endDateTime.time;
             image = r.picture === null ? undefined : r.picture;
-        })
-        .then(() => execute('categories', 'GET').then(async (cats) => categories = await cats.json()));
+        });
 
     const validateCategory = () => {
         let errorMsg = document.getElementById('categoryErrorMsg');
