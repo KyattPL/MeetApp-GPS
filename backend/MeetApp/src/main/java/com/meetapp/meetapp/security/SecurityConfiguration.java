@@ -45,7 +45,7 @@ public class SecurityConfiguration {
     @Bean
     RestTemplate restTemplate() throws Exception {
         KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-        keystore.load(new FileInputStream(new File("springboot.p12")), "password".toCharArray());
+        keystore.load(new FileInputStream(new File("~/MeetApp-GPS/backend/MeetApp/springboot.p12")), "password".toCharArray());
         SSLContext sslContext = new SSLContextBuilder()
                 .loadTrustMaterial(keystore, new TrustSelfSignedStrategy())
                 .loadKeyMaterial(keystore, "password".toCharArray())
