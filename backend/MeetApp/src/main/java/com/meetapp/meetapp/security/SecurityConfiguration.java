@@ -42,7 +42,7 @@ public class SecurityConfiguration {
     @Bean
     RestTemplate restTemplate() throws Exception {
         SSLContext sslContext = new SSLContextBuilder()
-                .loadTrustMaterial(new File("classpath:springboot.p12"), "password".toCharArray())
+                .loadTrustMaterial(new File("springboot.p12"), "password".toCharArray())
                 .build();
         SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
         CloseableHttpClient httpClient = HttpClients.custom()
