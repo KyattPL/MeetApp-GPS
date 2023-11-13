@@ -47,7 +47,7 @@ public class SecurityConfiguration {
         KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
         keystore.load(new FileInputStream(new File("springboot.p12")), "password".toCharArray());
         SSLContext sslContext = new SSLContextBuilder()
-                .loadTrustMaterial(null, new TrustSelfSignedStrategy())
+                .loadTrustMaterial(keystore, new TrustSelfSignedStrategy())
                 .loadKeyMaterial(keystore, "password".toCharArray())
                 .build();
         SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
