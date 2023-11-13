@@ -1,6 +1,7 @@
 package com.meetapp.meetapp.security;
 
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
@@ -17,7 +18,9 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.SSLContext;
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.http.HttpClient;
+import java.security.KeyStore;
 
 @Configuration
 @EnableWebSecurity
@@ -41,8 +44,11 @@ public class SecurityConfiguration {
 
     @Bean
     RestTemplate restTemplate() throws Exception {
+        KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
+        keystore.load(new FileInputStream(new File("springboot.p12")), "password".toCharArray());
         SSLContext sslContext = new SSLContextBuilder()
-                .loadTrustMaterial(new File("springboot.p12"), "password".toCharArray())
+                .loadTrustMaterial(null, new TrustSelfSignedStrategy())
+                .loadKeyMaterial(keystore, "password".toCharArray())
                 .build();
         SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
         CloseableHttpClient httpClient = HttpClients.custom()
