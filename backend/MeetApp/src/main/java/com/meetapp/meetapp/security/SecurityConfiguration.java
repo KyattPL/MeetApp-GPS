@@ -42,20 +42,20 @@ public class SecurityConfiguration {
         return http.build();
     }
 
-    @Bean
-    RestTemplate restTemplate() throws Exception {
-        KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-        keystore.load(new FileInputStream(new File("~/MeetApp-GPS/backend/MeetApp/springboot.p12")), "password".toCharArray());
-        SSLContext sslContext = new SSLContextBuilder()
-                .loadTrustMaterial(keystore, new TrustSelfSignedStrategy())
-                .loadKeyMaterial(keystore, "password".toCharArray())
-                .build();
-        SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
-        CloseableHttpClient httpClient = HttpClients.custom()
-                .setSSLSocketFactory(socketFactory)
-                .build();
-        HttpComponentsClientHttpRequestFactory factory =
-                new HttpComponentsClientHttpRequestFactory(httpClient);
-        return new RestTemplate(factory);
-    }
+//    @Bean
+//    RestTemplate restTemplate() throws Exception {
+//        KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
+//        keystore.load(new FileInputStream(new File("~/MeetApp-GPS/backend/MeetApp/springboot.p12")), "password".toCharArray());
+//        SSLContext sslContext = new SSLContextBuilder()
+//                .loadTrustMaterial(keystore, new TrustSelfSignedStrategy())
+//                .loadKeyMaterial(keystore, "password".toCharArray())
+//                .build();
+//        SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(sslContext);
+//        CloseableHttpClient httpClient = HttpClients.custom()
+//                .setSSLSocketFactory(socketFactory)
+//                .build();
+//        HttpComponentsClientHttpRequestFactory factory =
+//                new HttpComponentsClientHttpRequestFactory(httpClient);
+//        return new RestTemplate(factory);
+//    }
 }
