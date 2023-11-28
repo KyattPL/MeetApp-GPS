@@ -86,7 +86,7 @@
     <Header pageType="announcements" />
     <SortFilterBanner {sortOptions} />
     <div
-        class="bg-black opacity-0 w-full h-[calc(100%-10rem)] lg:h-[calc(100%-4rem)] z-1 absolute transition ease-in-out duration-300
+        class="bg-black opacity-0 w-full h-[calc(100%-10rem)] lg:h-[calc(100%-4rem)] z-[1] absolute transition ease-in-out duration-300
             {$isCreatorOpen ? 'opacity-50' : 'opacity-0'}"
     />
     <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-4rem)] lg:flex lg:flex-row" on:scroll={infiniteScroll} id="postsContainer">

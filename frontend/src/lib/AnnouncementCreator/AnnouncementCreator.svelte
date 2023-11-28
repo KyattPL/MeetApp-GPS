@@ -167,7 +167,7 @@
 </script>
 
 <dialog
-    class="rounded-2xl mx-auto p-4 flex flex-col bg-ivory text-cocoa
+    class="rounded-2xl mx-auto p-4 flex flex-col bg-ivory text-cocoa z-[1]
     border-2 border-pine w-1/2 absolute top-1/2"
 >
     <div class="flex flex-row-reverse">
@@ -200,7 +200,7 @@
             <Button clickHandler={() => (validateCategory() ? (currentModal = 'city') : null)} class="px-8 py-2">Dalej</Button>
         </div>
     {:else if currentModal === 'city'}
-        <div class="flex flex-col items-center">
+        <div class="flex flex-col items-center" id="cityInputBox">
             <SelectCityInput
                 fetch="http://meetapp.northeurope.cloudapp.azure.com:8080/api/locationsNonPost?nameSearch=[query]"
                 placeholder="Miasto"
