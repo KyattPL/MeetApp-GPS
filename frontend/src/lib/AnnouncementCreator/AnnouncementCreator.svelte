@@ -160,7 +160,7 @@
         };
         $selectedLongitude = 0;
         $selectedLatitude = 0;
-        execute('announcements', 'POST', requestBody).then((r) => $goto('/announcements'));
+        execute('announcements', 'POST', requestBody).then((r) => location.reload());
     };
 </script>
 
