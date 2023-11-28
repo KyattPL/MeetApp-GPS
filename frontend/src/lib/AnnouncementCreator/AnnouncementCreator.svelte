@@ -148,21 +148,19 @@
     }
 
     const handleSubmit = () => {
-        if (validateTitle() && validateCategory() && validateCity() && validateSpot() && validateDescription()) {
-            let requestBody = {
-                cityId: cityValue.city.id,
-                voivodeshipId: cityValue.voivodeship.id,
-                latitude: $selectedLatitude,
-                longitude: $selectedLongitude,
-                locationId: cityValue.id,
-                title: title,
-                description: descriptionValue,
-                categoryIds: categoryValue
-            };
-            $selectedLongitude = 0;
-            $selectedLatitude = 0;
-            execute('announcements', 'POST', requestBody).then((r) => $redirect('/announcements'));
-        }
+        let requestBody = {
+            cityId: cityValue.city.id,
+            voivodeshipId: cityValue.voivodeship.id,
+            latitude: $selectedLatitude,
+            longitude: $selectedLongitude,
+            locationId: cityValue.id,
+            title: title,
+            description: descriptionValue,
+            categoryIds: categoryValue
+        };
+        $selectedLongitude = 0;
+        $selectedLatitude = 0;
+        execute('announcements', 'POST', requestBody).then((r) => $redirect('/announcements'));
     };
 </script>
 
