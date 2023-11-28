@@ -222,6 +222,7 @@
             </div>
             <div use:mapAction class="w-[40rem] h-64" />
         </div>
+        <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="spotErrorMsg">Musisz wybrać lokalizację</p>
         <Button clickHandler={submitChoice} class="absolute bottom-2 right-2 h-12 w-12"><MdCheck /></Button>
     {:else if currentModal === 'description'}
         <div class="flex flex-col items-center">
