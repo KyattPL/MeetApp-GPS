@@ -4,6 +4,7 @@
     import * as L from 'leaflet';
     import 'leaflet/dist/leaflet.css';
 
+    import MdAdd from 'svelte-icons/md/MdAdd.svelte';
     import MdCheck from 'svelte-icons/md/MdCheck.svelte';
     import MdInfoOutline from 'svelte-icons/md/MdInfoOutline.svelte';
 
@@ -25,16 +26,22 @@
     let categoryValue = null;
     let cityValue = null;
     let descriptionValue = null;
+    let scheduleValue = null;
     let categories = [];
     let map;
     let marker;
-    let dateValue = null;
-    let timeValue = null;
-    let dateTimeErrorMessage = null;
-    let isoDateTime = null;
+    let startDateValue = null;
+    let startTimeValue = null;
+    let startDateTimeErrorMessage = null;
+    let startIsoDateTime = null;
+    let endDateValue = null;
+    let endTimeValue = null;
+    let endDateTimeErrorMessage = null;
+    let endIsoDateTime = null;
+    let endDateAfterStartDateErrorMessage = null;
     let peopleLimitValue = null;
 
-    let currentModal: 'title' | 'category' | 'city' | 'spot' | 'datetime' | 'limit' | 'description' | 'end' = 'title';
+    let currentModal: 'title' | 'photo' | 'category' | 'city' | 'spot' | 'eventDate' | 'limit' | 'description' | 'schedule' | 'end' = 'title';
 
     const closeModal = () => {
         $isOpen = false;
@@ -75,33 +82,80 @@
     };
 
     const validateDateTime = () => {
-        if (dateValue !== null && timeValue !== null) {
-            let date = new Date(dateValue);
-            const [hours, minutes] = timeValue.split(':');
-            date.setUTCHours(hours - 1);
-            date.setUTCMinutes(minutes);
+        if (startDateValue !== null && startTimeValue !== null) {
+            let startDate = new Date(startDateValue);
+            const [hours, minutes] = startTimeValue.split(':');
+            startDate.setUTCHours(hours - 1);
+            startDate.setUTCMinutes(minutes);
 
             const currentDate = new Date();
-            if (date > currentDate) {
-                if (dateTimeErrorMessage !== null) {
-                    dateTimeErrorMessage.className += ' hidden';
+            if (startDate > currentDate) {
+                if (startDateTimeErrorMessage !== null) {
+                    startDateTimeErrorMessage.className += ' hidden';
                 }
 
-                date.setUTCHours(date.getUTCHours() + 1); // it's complicated
-                isoDateTime = date.toISOString();
-                return true;
+                startDate.setUTCHours(startDate.getUTCHours() + 1); // it's complicated
+                startIsoDateTime = startDate.toISOString();
+
+                if (endDateValue !== null && endTimeValue !== null) {
+                    let endDate = new Date(endDateValue);
+                    const [hours, minutes] = endTimeValue.split(':');
+                    endDate.setUTCHours(hours - 1);
+                    endDate.setUTCMinutes(minutes);
+
+                    const currentDate = new Date();
+                    if (endDate > currentDate) {
+                        if (endDateTimeErrorMessage !== null) {
+                            endDateTimeErrorMessage.className += ' hidden';
+                        }
+
+                        endDate.setUTCHours(endDate.getUTCHours() + 1); // it's complicated
+                        endIsoDateTime = endDate.toISOString();
+
+                        if (endDate.getTime() - startDate.getTime() <= 0) {
+                            if (endDateAfterStartDateErrorMessage !== null) {
+                                endDateAfterStartDateErrorMessage.classList.remove('hidden');
+                            }
+
+                            return false;
+                        }
+
+                        if (endDateAfterStartDateErrorMessage !== null) {
+                            endDateAfterStartDateErrorMessage.className += ' hidden';
+                        }
+
+                        return true;
+                    }
+                }
+
+                if (endDateTimeErrorMessage !== null) {
+                    endDateTimeErrorMessage.classList.remove('hidden');
+                }
+
+                return false;
             }
         }
 
-        if (dateTimeErrorMessage !== null) {
-            dateTimeErrorMessage.classList.remove('hidden');
+        if (startDateTimeErrorMessage !== null) {
+            startDateTimeErrorMessage.classList.remove('hidden');
         }
+
         return false;
     };
 
     const validateDescription = () => {
         let errorMessage = document.getElementById('descriptionErrorMsg');
         if (descriptionValue === null || descriptionValue.length < 1 || descriptionValue.length > 200) {
+            errorMessage.classList.remove('hidden');
+            return false;
+        }
+        errorMessage.className += ' hidden';
+        return true;
+    };
+
+    const validateSchedule = () => {
+        let errorMessage = document.getElementById('scheduleErrorMsg');
+        if (scheduleValue === null || scheduleValue.length < 1 || scheduleValue.length > 5000) {
             errorMessage.classList.remove('hidden');
             return false;
         }
@@ -153,7 +207,7 @@
         $selectedLatitude = coords.lat;
         $selectedLongitude = coords.lng;
 
-        validateSpot() ? (currentModal = 'datetime') : null;
+        validateSpot() ? (currentModal = 'eventDate') : null;
     }
 
     function createMap(container) {
@@ -189,22 +243,45 @@
         };
     }
 
-    const handleSubmit = () => {
-        let requestBody = {
-            cityId: cityValue.city.id,
-            voivodeshipId: cityValue.voivodeship.id,
-            latitude: $selectedLatitude,
-            longitude: $selectedLongitude,
-            locationId: cityValue.id,
-            title: title,
-            description: descriptionValue,
-            categoryIds: categoryValue,
-            meetingDate: isoDateTime,
-            personQuota: peopleLimitValue
-        };
+    const handleSubmit = async () => {
+        let multipartImage = new FormData();
+        multipartImage.append('cityId', cityValue.city.id);
+        multipartImage.append('voivodeshipId', cityValue.voivodeship.id);
+        multipartImage.append('latitude', $selectedLatitude.toString());
+        multipartImage.append('longitude', $selectedLongitude.toString());
+        multipartImage.append('locationId', cityValue.id);
+        multipartImage.append('title', title);
+        multipartImage.append('description', descriptionValue);
+        multipartImage.append('schedule', scheduleValue);
+        multipartImage.append('categoryIds', categoryValue);
+        multipartImage.append('startDate', startIsoDateTime);
+        multipartImage.append('endDate', endIsoDateTime);
+        multipartImage.append('personQuota', peopleLimitValue);
+        multipartImage.append('picture', blob);
+
         $selectedLongitude = 0;
         $selectedLatitude = 0;
-        execute('meetings', 'POST', requestBody).then((r) => location.reload());
+
+        await fetch(`http://meetapp.northeurope.cloudapp.azure.com:8080/api/events`, {
+            method: 'POST',
+            body: multipartImage
+        }).then(() => location.reload());
+    };
+
+    let image, fileInput;
+    let blob;
+
+    const onFileSelected = (e) => {
+        blob = e.target.files[0];
+        let reader = new FileReader();
+        try {
+            reader.readAsDataURL(blob);
+            reader.onload = (e) => {
+                image = e.target.result;
+            };
+        } catch (e) {
+            console.error(e);
+        }
     };
 </script>
 
@@ -225,7 +302,37 @@
         <div class="flex flex-col items-center">
             <PostNameInput placeholder="Nazwa ogłoszenia" bind:value={title} maxLength={50} />
             <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="titleErrorMsg">Tytuł musi mieć 5-50 znaków</p>
-            <Button clickHandler={() => (validateTitle() ? (currentModal = 'category') : null)} class="px-8 py-2">Dalej</Button>
+            <Button clickHandler={() => (validateTitle() ? (currentModal = 'photo') : null)} class="px-8 py-2">Dalej</Button>
+        </div>
+    {:else if currentModal === 'photo'}
+        <div class="flex flex-col items-center">
+            {#if image !== undefined}
+                <div class="mx-8 aspect-square w-full rounded-2xl bg-white flex justify-center text-center text-pickle flex-col">
+                    <img class="rounded-2xl" src={image} />
+                    <div
+                        class="my-2 hover:cursor-pointer"
+                        on:click={() => {
+                            fileInput.click();
+                        }}
+                    >
+                        Zmień zdjęcie
+                    </div>
+                </div>
+            {:else}
+                <div
+                    class="mx-14 aspect-square w-full border-pickle rounded-2xl border-2 bg-white flex justify-center text-center text-pickle flex-col hover:cursor-pointer"
+                    on:click={() => {
+                        fileInput.click();
+                    }}
+                >
+                    <div class="h-12 w-12 ml-auto mr-auto">
+                        <MdAdd />
+                    </div>
+                    Dodaj zdjęcie
+                </div>
+            {/if}
+            <input style="display:none" type="file" accept=".jpg, .jpeg, .png" on:change={(e) => onFileSelected(e)} bind:this={fileInput} />
+            <Button clickHandler={() => (currentModal = 'category')} class="px-8 py-2">Dalej</Button>
         </div>
     {:else if currentModal === 'category'}
         <div class="flex flex-col items-center">
@@ -266,17 +373,35 @@
         </div>
         <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="spotErrorMsg">Musisz wybrać lokalizację</p>
         <Button clickHandler={submitChoice} class="absolute bottom-2 right-2 h-12 w-12"><MdCheck /></Button>
-    {:else if currentModal === 'datetime'}
+    {:else if currentModal === 'eventDate'}
         <div class="flex flex-col items-center">
-            <div class="flex">
-                <div class="py-2 mr-0.5 object-left flex-1">
-                    <PostDateInput bind:value={dateValue} />
-                </div>
-                <div class="py-2 ml-0.5 object-right flex-1">
-                    <PostTimeInput bind:value={timeValue} />
+            <div class="flex flex-col mt-2 text-pine">
+                <p class="text-lg">Data rozpoczęcia</p>
+                <div class="flex flex-row">
+                    <div class="py-1 mr-0.5 object-left flex-1">
+                        <PostDateInput bind:value={startDateValue} />
+                    </div>
+                    <div class="py-1 ml-0.5 object-right flex-1">
+                        <PostTimeInput bind:value={startTimeValue} />
+                    </div>
                 </div>
             </div>
-            <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={dateTimeErrorMessage}>Data musi być w przyszłości</p>
+            <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={startDateTimeErrorMessage}>Data musi być w przyszłości</p>
+            <div class="flex flex-col mt-2 text-pine">
+                <p class="text-lg">Data zakończenia</p>
+                <div class="flex flex-row">
+                    <div class="py-1 mr-0.5 object-left flex-1">
+                        <PostDateInput bind:value={endDateValue} />
+                    </div>
+                    <div class="py-1 ml-0.5 object-right flex-1">
+                        <PostTimeInput bind:value={endTimeValue} />
+                    </div>
+                </div>
+            </div>
+            <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={endDateTimeErrorMessage}>Data musi być w przyszłości</p>
+            <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={endDateAfterStartDateErrorMessage}>
+                Data zakończenia musi być po dacie rozpoczęcia
+            </p>
             <Button clickHandler={() => (validateDateTime() ? (currentModal = 'limit') : null)} class="px-8 py-2">Dalej</Button>
         </div>
     {:else if currentModal === 'limit'}
@@ -287,9 +412,15 @@
         </div>
     {:else if currentModal === 'description'}
         <div class="flex flex-col items-center">
-            <PostDescription bind:value={descriptionValue} style="!w-[40rem] !mb-2" maxLength={200} placeholder="Opis" />
+            <PostDescription bind:value={descriptionValue} style="!w-[40rem] !mb-2" maxLength={10000} placeholder="Opis" />
             <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
-            <Button clickHandler={() => (validateDescription() ? (currentModal = 'end') : null)} class="px-8 py-2">Dalej</Button>
+            <Button clickHandler={() => (validateDescription() ? (currentModal = 'schedule') : null)} class="px-8 py-2">Dalej</Button>
+        </div>
+    {:else if currentModal === 'schedule'}
+        <div class="flex flex-col items-center">
+            <PostDescription placeholder="Harmonogram" bind:value={scheduleValue} maxLength={5000} style="!w-[40rem] !mb-2" />
+            <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="scheduleErrorMsg">Harmonogram nie może być pusty</p>
+            <Button clickHandler={() => (validateSchedule() ? (currentModal = 'end') : null)} class="px-8 py-2">Dalej</Button>
         </div>
     {:else}
         <div class="flex flex-col items-center">
