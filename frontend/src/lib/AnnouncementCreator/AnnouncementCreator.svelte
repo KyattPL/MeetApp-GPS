@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Writable } from 'svelte/store';
-    import { redirect } from '@roxi/routify';
+    import { goto } from '@roxi/routify';
 
     import * as L from 'leaflet';
     import 'leaflet/dist/leaflet.css';
@@ -160,7 +160,7 @@
         };
         $selectedLongitude = 0;
         $selectedLatitude = 0;
-        execute('announcements', 'POST', requestBody).then((r) => $redirect('/announcements'));
+        execute('announcements', 'POST', requestBody).then((r) => $goto('/announcements'));
     };
 </script>
 
