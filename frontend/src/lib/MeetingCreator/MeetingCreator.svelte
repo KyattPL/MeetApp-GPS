@@ -12,6 +12,9 @@
     import execute from '../fetchWrapper';
     import SelectCityInput from '../SelectCityInput/SelectCityInput.svelte';
     import PostNameInput from '../PostNameInput/PostNameInput.svelte';
+    import PostDateInput from '../../lib/PostDateInput/PostDateInput.svelte';
+    import PostTimeInput from '../../lib/PostTimeInput/PostTimeInput.svelte';
+    import PeopleLimitInput from '../../lib/PeopleLimitInput/PeopleLimitInput.svelte';
     import PostDescription from '../PostDescription/PostDescription.svelte';
     import { selectedLatitude, selectedLongitude } from '../stores';
     import calculateDistanceBetweenCoords from '../utils';
@@ -25,8 +28,13 @@
     let categories = [];
     let map;
     let marker;
+    let dateValue = null;
+    let timeValue = null;
+    let dateTimeErrorMessage = null;
+    let isoDateTime = null;
+    let peopleLimitValue = null;
 
-    let currentModal: 'title' | 'category' | 'city' | 'spot' | 'description' | 'end' = 'title';
+    let currentModal: 'title' | 'category' | 'city' | 'spot' | 'datetime' | 'limit' | 'description' | 'end' = 'title';
 
     const closeModal = () => {
         $isOpen = false;
@@ -66,9 +74,44 @@
         return true;
     };
 
+    const validateDateTime = () => {
+        if (dateValue !== null && timeValue !== null) {
+            let date = new Date(dateValue);
+            const [hours, minutes] = timeValue.split(':');
+            date.setUTCHours(hours - 1);
+            date.setUTCMinutes(minutes);
+
+            const currentDate = new Date();
+            if (date > currentDate) {
+                if (dateTimeErrorMessage !== null) {
+                    dateTimeErrorMessage.className += ' hidden';
+                }
+
+                date.setUTCHours(date.getUTCHours() + 1); // it's complicated
+                isoDateTime = date.toISOString();
+                return true;
+            }
+        }
+
+        if (dateTimeErrorMessage !== null) {
+            dateTimeErrorMessage.classList.remove('hidden');
+        }
+        return false;
+    };
+
     const validateDescription = () => {
         let errorMessage = document.getElementById('descriptionErrorMsg');
         if (descriptionValue === null || descriptionValue.length < 1 || descriptionValue.length > 200) {
+            errorMessage.classList.remove('hidden');
+            return false;
+        }
+        errorMessage.className += ' hidden';
+        return true;
+    };
+
+    const validatePeopleLimit = () => {
+        let errorMessage = document.getElementById('peopleLimitErrorMsg');
+        if (peopleLimitValue === null || peopleLimitValue <= 0) {
             errorMessage.classList.remove('hidden');
             return false;
         }
@@ -110,7 +153,7 @@
         $selectedLatitude = coords.lat;
         $selectedLongitude = coords.lng;
 
-        validateSpot() ? (currentModal = 'description') : null;
+        validateSpot() ? (currentModal = 'datetime') : null;
     }
 
     function createMap(container) {
@@ -155,11 +198,13 @@
             locationId: cityValue.id,
             title: title,
             description: descriptionValue,
-            categoryIds: categoryValue
+            categoryIds: categoryValue,
+            meetingDate: isoDateTime,
+            personQuota: peopleLimitValue
         };
         $selectedLongitude = 0;
         $selectedLatitude = 0;
-        execute('announcements', 'POST', requestBody).then((r) => location.reload());
+        execute('meetings', 'POST', requestBody).then((r) => location.reload());
     };
 </script>
 
@@ -221,6 +266,25 @@
         </div>
         <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="spotErrorMsg">Musisz wybrać lokalizację</p>
         <Button clickHandler={submitChoice} class="absolute bottom-2 right-2 h-12 w-12"><MdCheck /></Button>
+    {:else if currentModal === 'datetime'}
+        <div class="flex flex-col items-center">
+            <div class="flex">
+                <div class="py-2 mr-0.5 object-left flex-1">
+                    <PostDateInput bind:value={dateValue} />
+                </div>
+                <div class="py-2 ml-0.5 object-right flex-1">
+                    <PostTimeInput bind:value={timeValue} />
+                </div>
+            </div>
+            <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={dateTimeErrorMessage}>Data musi być w przyszłości</p>
+            <Button clickHandler={() => (validateDateTime() ? (currentModal = 'limit') : null)} class="px-8 py-2">Dalej</Button>
+        </div>
+    {:else if currentModal === 'limit'}
+        <div class="flex flex-col items-center">
+            <PeopleLimitInput bind:value={peopleLimitValue} />
+            <p class="hidden peer-invalid:block text-red-500 text-sm my-2" id="peopleLimitErrorMsg">Limit osób musi być dodatni</p>
+            <Button clickHandler={() => (validatePeopleLimit() ? (currentModal = 'description') : null)} class="px-8 py-2">Dalej</Button>
+        </div>
     {:else if currentModal === 'description'}
         <div class="flex flex-col items-center">
             <PostDescription bind:value={descriptionValue} style="!w-[40rem] !mb-2" maxLength={200} placeholder="Opis" />
