@@ -1,5 +1,8 @@
 <script lang="ts">
-    import AddPostButton from '../../lib/AddPostButton/AddPostButton.svelte';
+    import MdAdd from 'svelte-icons/md/MdAdd.svelte';
+
+    // import AddPostButton from '../../lib/AddPostButton/AddPostButton.svelte';
+    import AnnouncementCreator from '../../lib/AnnouncementCreator/AnnouncementCreator.svelte';
     import AnnouncementListElem from '../../lib/Announcements/AnnouncementListElem/AnnouncementListElem.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
     import Header from '../../lib/Header/Header.svelte';
@@ -8,6 +11,7 @@
     import execute from '../../lib/fetchWrapper';
     import { filteredCategoryIds, filteredLocationIds, sortingOption, nameSearchParam, clearFilters } from '../../lib/stores';
     import { userDetails } from '../../lib/stores.js';
+    import { writable } from 'svelte/store';
 
     let data = [];
     let selected: number | null = null;
@@ -19,6 +23,8 @@
     ];
     let announcementsPromise: Promise<any>;
     let page: number = 0;
+
+    let isCreatorOpen = writable(false);
 
     clearFilters();
 
@@ -42,6 +48,10 @@
         execute(`announcements?page=${page}&` + urlParams.toString(), 'GET')
             .then((r) => r.json())
             .then((r) => (data = [...data, ...r]));
+    };
+
+    const openCreatorModal = () => {
+        $isCreatorOpen = true;
     };
 
     $: {
@@ -75,6 +85,10 @@
 <div class="h-screen">
     <Header pageType="announcements" />
     <SortFilterBanner {sortOptions} />
+    <div
+        class="bg-black opacity-0 w-full h-[calc(100%-10rem)] lg:h-[calc(100%-4rem)] z-1 absolute transition ease-in-out duration-300
+            {$isCreatorOpen ? 'opacity-50' : 'opacity-0'}"
+    />
     <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-4rem)] lg:flex lg:flex-row" on:scroll={infiniteScroll} id="postsContainer">
         <div class="hidden lg:block lg:w-1/3 lg:bg-green-mist overflow-auto">
             <SortFilterColumn {sortOptions} />
@@ -88,8 +102,17 @@
         </div>
         <div class="hidden lg:block lg:w-1/3" />
     </div>
-    {#if $userDetails !== null}
-        <AddPostButton pageType="announcements" />
+    {#if $userDetails === null}
+        {#if $isCreatorOpen}
+            <AnnouncementCreator isOpen={isCreatorOpen} />
+        {:else}
+            <button class="absolute rounded-full bg-grass bottom-20 right-4 h-12 w-12 lg:h-20 lg:w-20 lg:right-20" on:click={openCreatorModal}>
+                <div class="h-8 w-8 ml-auto mr-auto lg:w-12 lg:h-12 text-cocoa">
+                    <MdAdd />
+                </div>
+            </button>
+        {/if}
+        <!-- <AddPostButton pageType="announcements" /> -->
     {/if}
     <Footer pageType="announcements" />
 </div>

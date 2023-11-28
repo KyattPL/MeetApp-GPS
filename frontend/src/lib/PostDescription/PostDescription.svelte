@@ -2,6 +2,7 @@
     export let value;
     export let maxLength = 0;
     export let placeholder;
+    export let style = '';
 
     $: {
         if (value !== null && value.length > maxLength) {
@@ -15,7 +16,7 @@
         id="post-name"
         class="bg-ivory border-2 border-pickle text-gray 
     px-2 py-3 text-2xl rounded-lg w-full block
-    focus:outline-none focus:border-pickle focus:ring-1 focus:ring-pickle focus:text-cocoa"
+    focus:outline-none focus:border-pickle focus:ring-1 focus:ring-pickle focus:text-cocoa {style}"
         rows="7"
         {placeholder}
         required
