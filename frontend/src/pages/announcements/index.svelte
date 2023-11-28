@@ -102,7 +102,7 @@
         </div>
         <div class="hidden lg:block lg:w-1/3" />
     </div>
-    {#if $userDetails === null}
+    {#if $userDetails !== null}
         {#if $isCreatorOpen}
             <AnnouncementCreator isOpen={isCreatorOpen} />
         {:else}
