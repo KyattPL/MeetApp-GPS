@@ -4,10 +4,6 @@
 
     import execute from '../../lib/fetchWrapper';
 
-    import FaCalendarDay from 'svelte-icons/fa/FaCalendarDay.svelte';
-    import MdAnnouncement from 'svelte-icons/md/MdAnnouncement.svelte';
-    import MeetingSymbol from '../../assets/MeetingSymbol.svelte';
-
     import Header from '../../lib/Header/Header.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
 
@@ -83,10 +79,16 @@
 
         closedPopup = false;
 
-        let customIcon = L.icon({ iconUrl: 'marker-other.png', iconSize: [25, 42] });
         let newMarkers = [];
         markerData.forEach((loc) => {
-            console.log(loc);
+            let customIcon = null;
+            if ('endDate' in loc) {
+                customIcon = L.icon({ iconUrl: 'm-event.png', iconSize: [25, 42] });
+            } else if ('meetingDate' in loc) {
+                customIcon = L.icon({ iconUrl: 'm-meeting.png', iconSize: [25, 42] });
+            } else {
+                customIcon = L.icon({ iconUrl: 'm-announcement.png', iconSize: [25, 42] });
+            }
             let newMarker = L.marker(loc.location.point.coordinates.reverse(), { interactive: true, icon: customIcon });
             newMarker
                 .on('click', (e) => {
@@ -153,18 +155,6 @@
             .then((r) => createMarkers(r, map));
     }
 
-    function switchAnnouncement() {
-        areAnnouncementsOn = !areAnnouncementsOn;
-    }
-
-    function switchMeeting() {
-        areMeetingsOn = !areMeetingsOn;
-    }
-
-    function switchEvent() {
-        areEventsOn = !areEventsOn;
-    }
-
     function selectedRadius() {
         isRadiusFilterOn = radiusInMeters != '0';
 
@@ -213,36 +203,25 @@
             <option value="15000">+15 km</option>
         </select>
     </div>
-    <button
-        class="absolute rounded-full {areEventsOn
-            ? 'bg-grass'
-            : 'bg-gray'} border-pine border-2 bottom-64 right-4 h-12 w-12 lg:bottom-56 lg:h-20 lg:w-20 lg:right-20 z-[9999]"
-        on:click={switchEvent}
-    >
-        <div class="h-8 w-8 p-1 ml-auto mr-auto lg:w-12 lg:h-12 text-cocoa">
-            <FaCalendarDay />
+    <div class="absolute z-[9999] p-4 flex flex-col bottom-4 right-4 bg-ivory text-cocoa rounded-xl border-pine border-2 gap-2">
+        <div class="text-xl font-black self-center">Legenda:</div>
+        <div class="flex flex-row items-center justify-between">
+            <div class="font-semibold">Twoja pozycja -</div>
+            <img src="marker-user.png" class="object-contain h-8 w-8" alt="" />
         </div>
-    </button>
-    <button
-        class="absolute rounded-full {areMeetingsOn
-            ? 'bg-grass'
-            : 'bg-gray'} border-pine border-2 bottom-44 right-4 h-12 w-12 lg:bottom-32 lg:h-20 lg:w-20 lg:right-20 z-[9999]"
-        on:click={switchMeeting}
-    >
-        <div class="h-8 w-8 p-1 ml-auto mr-auto lg:w-12 lg:h-12 text-cocoa">
-            <MeetingSymbol />
+        <div class="flex flex-row items-center justify-between">
+            <div class="font-semibold">Wydarzenie -</div>
+            <img src="m-event.png" class="object-contain h-8 w-8" alt="" />
         </div>
-    </button>
-    <button
-        class="absolute rounded-full {areAnnouncementsOn
-            ? 'bg-grass'
-            : 'bg-gray'} border-pine border-2 bottom-24 right-4 h-12 w-12 lg:bottom-8 lg:h-20 lg:w-20 lg:right-20 z-[9999]"
-        on:click={switchAnnouncement}
-    >
-        <div class="h-8 w-8 p-1 ml-auto mr-auto lg:w-12 lg:h-12 text-cocoa">
-            <MdAnnouncement />
+        <div class="flex flex-row items-center justify-between">
+            <div class="font-semibold">Spotkanie -</div>
+            <img src="m-meeting.png" class="object-contain h-8 w-8" alt="" />
         </div>
-    </button>
+        <div class="flex flex-row items-center justify-between">
+            <div class="font-semibold">Ogłoszenie -</div>
+            <img src="m-announcement.png" class="object-contain h-8 w-8" alt="" />
+        </div>
+    </div>
     {#if usersLatitude !== null && usersLongitude !== null}
         <div use:mapAction class="h-[calc(100%-8rem)] lg:h-[calc(100%-4rem)]" />
     {/if}
