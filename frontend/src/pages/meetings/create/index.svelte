@@ -39,7 +39,7 @@
     let marker;
 
     if ($userDetails === null) {
-        $redirect('/login');
+        //$redirect('/login');
     }
 
     execute('categories', 'GET').then(async (response) => (categories = await response.json()));
