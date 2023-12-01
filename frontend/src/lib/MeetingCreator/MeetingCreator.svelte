@@ -223,7 +223,7 @@
     </div>
     {#if currentModal === 'title'}
         <div class="flex flex-col items-center">
-            <PostNameInput placeholder="Nazwa ogłoszenia" bind:value={title} maxLength={50} />
+            <PostNameInput placeholder="Nazwa spotkania" bind:value={title} maxLength={50} />
             <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="titleErrorMsg">Tytuł musi mieć 5-50 znaków</p>
             <Button clickHandler={() => (validateTitle() ? (currentModal = 'category') : null)} class="px-8 py-2">Dalej</Button>
         </div>
