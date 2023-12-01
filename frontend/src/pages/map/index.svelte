@@ -88,11 +88,11 @@
         markerData.forEach((loc) => {
             console.log(loc);
             let newMarker = L.marker(loc.location.point.coordinates.reverse(), { interactive: true, icon: customIcon });
-            newMarker
-                .on('click', (e) => {
-                    newMarker.bindPopup(createPopup(loc));
-                })
-                .openPopup();
+            newMarker.bindPopup(createPopup(loc));
+            newMarker.on('click', (e) => {
+                newMarker.openPopup();
+            });
+            // .openPopup();
             newMarkers.push(newMarker);
         });
 
