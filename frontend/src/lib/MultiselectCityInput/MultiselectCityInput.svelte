@@ -56,6 +56,6 @@
 
 <style>
     .svelecte-multiselect :global(.sv-content) {
-        overflow-x: scroll;
+        overflow-x: auto;
     }
 </style>

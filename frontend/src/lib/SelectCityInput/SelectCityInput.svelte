@@ -54,7 +54,7 @@
 
 <style>
     .svelecte-select :global(.sv-content) {
-        overflow-x: scroll;
+        overflow-x: auto;
     }
 
     .svelecte-select :global(.sv-control) {
