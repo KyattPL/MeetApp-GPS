@@ -78,7 +78,7 @@
             dateValue = r.meetingDateTime.date.split('.').reverse().join('-');
             timeValue = r.meetingDateTime.time;
         })
-        .then(() => execute('categories', 'GET').then(async (cats) => categories = await cats.json()));
+        .then(() => execute('categories', 'GET').then(async (cats) => (categories = await cats.json())));
 
     const validateCategory = () => {
         let errorMsg = document.getElementById('categoryErrorMsg');
@@ -108,7 +108,7 @@
     const validateDateTime = () => {
         if (dateValue !== null && timeValue !== null) {
             let date = new Date(dateValue);
-            const [hours, minutes] = timeValue.split(':');
+            const [hours, minutes] = [timeValue.getHours(), timeValue.getMinutes()];
             date.setUTCHours(hours - 1);
             date.setUTCMinutes(minutes);
 

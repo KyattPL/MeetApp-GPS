@@ -82,7 +82,7 @@
     const validateDateTime = () => {
         if (startDateValue !== null && startTimeValue !== null) {
             let startDate = new Date(startDateValue);
-            const [hours, minutes] = startTimeValue.split(':');
+            const [hours, minutes] = [startTimeValue.getHours(), startTimeValue.getMinutes()];
             startDate.setUTCHours(hours - 1);
             startDate.setUTCMinutes(minutes);
 
@@ -97,7 +97,7 @@
 
                 if (endDateValue !== null && endTimeValue !== null) {
                     let endDate = new Date(endDateValue);
-                    const [hours, minutes] = endTimeValue.split(':');
+                    const [hours, minutes] = [endTimeValue.getHours(), endTimeValue.getMinutes()];
                     endDate.setUTCHours(hours - 1);
                     endDate.setUTCMinutes(minutes);
 
