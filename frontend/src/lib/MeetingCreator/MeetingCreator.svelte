@@ -268,6 +268,7 @@
         <Button clickHandler={submitChoice} class="absolute bottom-2 right-2 h-12 w-12"><MdCheck /></Button>
     {:else if currentModal === 'datetime'}
         <div class="flex flex-col items-center">
+            <p class="text-lg">Data spotkania</p>
             <div class="flex">
                 <div class="py-2 mr-0.5 object-left flex-1">
                     <PostDateInput bind:value={dateValue} />
@@ -281,7 +282,7 @@
         </div>
     {:else if currentModal === 'limit'}
         <div class="flex flex-col items-center">
-            <PeopleLimitInput bind:value={peopleLimitValue} />
+            <PeopleLimitInput bind:value={peopleLimitValue} style="!w-[40rem] !mb-2 !border-pickle !border-2" />
             <p class="hidden peer-invalid:block text-red-500 text-sm my-2" id="peopleLimitErrorMsg">Limit osób musi być dodatni</p>
             <Button clickHandler={() => (validatePeopleLimit() ? (currentModal = 'description') : null)} class="px-8 py-2">Dalej</Button>
         </div>

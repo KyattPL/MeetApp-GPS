@@ -1,5 +1,6 @@
 <script>
     export let value = null;
+    export let style = '';
 
     const validateInput = () => {
         if (value !== null && !/^$|^\d+$/.test(value)) {
@@ -11,7 +12,7 @@
 <input
     min="0"
     id="post-name"
-    class="bg-ivory text-gray 
+    class="bg-ivory text-gray {style}
 px-2 py-3 text-2xl rounded-lg w-2/3 block
 focus:outline-none focus:border-tea focus:ring-1 focus:ring-tea focus:text-cocoa"
     placeholder="Limit osób"

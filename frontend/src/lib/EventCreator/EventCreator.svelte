@@ -307,8 +307,8 @@
     {:else if currentModal === 'photo'}
         <div class="flex flex-col items-center">
             {#if image !== undefined}
-                <div class="mx-8 aspect-square w-full rounded-2xl bg-white flex justify-center text-center text-pickle flex-col">
-                    <img class="rounded-2xl" src={image} />
+                <div class="mx-8 mb-2 aspect-square p-2 rounded-2xl bg-white flex justify-center text-center text-pickle flex-col">
+                    <img class="rounded-2xl object-contain w-40" src={image} />
                     <div
                         class="my-2 hover:cursor-pointer"
                         on:click={() => {
@@ -320,7 +320,7 @@
                 </div>
             {:else}
                 <div
-                    class="mx-14 aspect-square w-full border-pickle rounded-2xl border-2 bg-white flex justify-center text-center text-pickle flex-col hover:cursor-pointer"
+                    class="mx-14 aspect-square p-2 mb-2 border-pickle rounded-2xl border-2 bg-white flex justify-center text-center text-pickle flex-col hover:cursor-pointer"
                     on:click={() => {
                         fileInput.click();
                     }}
@@ -406,7 +406,7 @@
         </div>
     {:else if currentModal === 'limit'}
         <div class="flex flex-col items-center">
-            <PeopleLimitInput bind:value={peopleLimitValue} />
+            <PeopleLimitInput bind:value={peopleLimitValue} style="!w-[40rem] !mb-2 !border-pickle !border-2" />
             <p class="hidden peer-invalid:block text-red-500 text-sm my-2" id="peopleLimitErrorMsg">Limit osób musi być dodatni</p>
             <Button clickHandler={() => (validatePeopleLimit() ? (currentModal = 'description') : null)} class="px-8 py-2">Dalej</Button>
         </div>
@@ -428,7 +428,7 @@
                 <div class="w-10 mx-2">
                     <MdInfoOutline />
                 </div>
-                <p class="text-sm">Czy na pewno chcesz opublikować to spotkanie?</p>
+                <p class="text-sm">Czy na pewno chcesz opublikować to wydarzenie?</p>
             </div>
             <Button clickHandler={handleSubmit} class="px-8 py-2">Utwórz</Button>
         </div>

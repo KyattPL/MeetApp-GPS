@@ -20,7 +20,7 @@ focus:outline-none focus:border-tea focus:ring-1 focus:ring-tea focus:text-cocoa
     closeOnSelection
     format="%d/%m/%Y"
     locale="pl-PL"
-    inputClass="!bg-ivory !text-gray !px-2 !py-3 !rounded-lg !block !border-none
+    inputClass="!bg-ivory !text-gray !px-2 !py-3 !rounded-lg !block !border-pickle !border-2 !text-cocoa
     !focus:outline-none !focus:border-tea !focus:ring-1 !focus:ring-tea !focus:text-cocoa"
 />
 
