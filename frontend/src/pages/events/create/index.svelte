@@ -297,133 +297,142 @@
     function openSpotPicker() {
         isSpotPickerActive = true;
     }
+
+    function closeModal() {
+        isSpotPickerActive = false;
+    }
 </script>
 
-{#if isSpotPickerActive}
-    <div class="h-screen">
-        <Header pageType="main" />
-        <button class="absolute rounded-full bg-grass bottom-20 right-4 h-12 w-12 lg:h-20 lg:w-20 lg:right-20 z-[9999]" on:click={submitChoice}>
-            <div class="h-8 w-8 ml-auto mr-auto lg:w-12 lg:h-12 text-cocoa">
-                <MdCheck />
-            </div>
-        </button>
-        <div
-            class="absolute rounded-lg text-ivory bg-red-700 left-1/2 mx-auto bottom-10 h-16 w-48 lg:h-24 lg:w-72 z-[9999] opacity-0
-    transition ease-in-out delay-300 font-bold border-2 border-cocoa px-4 py-2 transform -translate-x-1/2 pointer-events-none"
-            id="tooFarToast"
-        >
-            <p>Za daleko od wybranego miasta!</p>
-        </div>
-        <div use:mapAction class="h-[calc(100%-4rem)] lg:h-[calc(100%-4rem)]" />
-    </div>
-{:else}
-    <div class="h-screen">
-        <Header />
+<div class="h-screen">
+    <Header />
 
-        <div class="flex flex-col h-[calc(100%-4rem)] lg:w-1/3 lg:mx-auto overflow-auto justify-between items-center bg-ivory">
-            <div class="w-full">
-                <PostNameInput placeholder="Nazwa wydarzenia" bind:value={title} maxLength={100} />
-                <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="titleErrorMsg">Tytuł musi mieć 5-100 znaków</p>
+    <div class="flex flex-col h-[calc(100%-4rem)] lg:w-1/3 lg:mx-auto overflow-auto justify-between items-center bg-ivory">
+        <div class="w-full">
+            <PostNameInput placeholder="Nazwa wydarzenia" bind:value={title} maxLength={100} />
+            <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="titleErrorMsg">Tytuł musi mieć 5-100 znaków</p>
 
-                <p class="mx-1.5 mb-1 text-lg text-pine">Zdjęcie wydarzenia</p>
-                <div class="flex justify-center">
-                    {#if image !== undefined}
-                        <div class="mx-8 aspect-square w-full rounded-2xl bg-white flex justify-center text-center text-pickle flex-col">
-                            <img class="rounded-2xl" src={image} />
-                            <div
-                                class="my-2 hover:cursor-pointer"
-                                on:click={() => {
-                                    fileInput.click();
-                                }}
-                            >
-                                Zmień zdjęcie
-                            </div>
-                        </div>
-                    {:else}
+            <p class="mx-1.5 mb-1 text-lg text-pine">Zdjęcie wydarzenia</p>
+            <div class="flex justify-center">
+                {#if image !== undefined}
+                    <div class="mx-8 aspect-square w-full rounded-2xl bg-white flex justify-center text-center text-pickle flex-col">
+                        <img class="rounded-2xl" src={image} />
                         <div
-                            class="mx-14 aspect-square w-full border-pickle rounded-2xl border-2 bg-white flex justify-center text-center text-pickle flex-col hover:cursor-pointer"
+                            class="my-2 hover:cursor-pointer"
                             on:click={() => {
                                 fileInput.click();
                             }}
                         >
-                            <div class="h-12 w-12 ml-auto mr-auto">
-                                <MdAdd />
-                            </div>
-                            Dodaj zdjęcie
+                            Zmień zdjęcie
                         </div>
-                    {/if}
-                    <input style="display:none" type="file" accept=".jpg, .jpeg, .png" on:change={(e) => onFileSelected(e)} bind:this={fileInput} />
-                </div>
+                    </div>
+                {:else}
+                    <div
+                        class="mx-14 aspect-square w-full border-pickle rounded-2xl border-2 bg-white flex justify-center text-center text-pickle flex-col hover:cursor-pointer"
+                        on:click={() => {
+                            fileInput.click();
+                        }}
+                    >
+                        <div class="h-12 w-12 ml-auto mr-auto">
+                            <MdAdd />
+                        </div>
+                        Dodaj zdjęcie
+                    </div>
+                {/if}
+                <input style="display:none" type="file" accept=".jpg, .jpeg, .png" on:change={(e) => onFileSelected(e)} bind:this={fileInput} />
+            </div>
 
-                <div class="mx-1.5 mt-2" id="categoryInputBox">
-                    <MultiselectCategoryInput
-                        style=""
-                        data={categories}
-                        placeholder="Kategoria"
-                        inputId="categorySelect"
-                        bind:selected={categoryValue}
+            <div class="mx-1.5 mt-2" id="categoryInputBox">
+                <MultiselectCategoryInput style="" data={categories} placeholder="Kategoria" inputId="categorySelect" bind:selected={categoryValue} />
+            </div>
+            <p class="text-red-500 text-sm mt-1 mx-8 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
+
+            <div class="bg-tea mx-1.5 my-4 p-2 rounded-lg">
+                <div id="cityInputBox" class="pb-2">
+                    <SelectCityInput
+                        fetch="http://meetapp.northeurope.cloudapp.azure.com:8080/api/locationsNonPost?nameSearch=[query]"
+                        placeholder="Miasto"
+                        inputId="citySelect"
+                        bind:selected={cityValue}
                     />
+                    <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
                 </div>
-                <p class="text-red-500 text-sm mt-1 mx-8 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
-
-                <div class="bg-tea mx-1.5 my-4 p-2 rounded-lg">
-                    <div id="cityInputBox" class="pb-2">
-                        <SelectCityInput
-                            fetch="http://meetapp.northeurope.cloudapp.azure.com:8080/api/locationsNonPost?nameSearch=[query]"
-                            placeholder="Miasto"
-                            inputId="citySelect"
-                            bind:selected={cityValue}
-                        />
-                        <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={openSpotPicker}>Wybierz miejsce</Button>
-                        <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="spotErrorMsg">Musisz wybrać lokalizację</p>
-                    </div>
-                    <div class="flex flex-col mt-2 text-pine">
-                        <p class="text-lg">Data rozpoczęcia</p>
-                        <div class="flex flex-row">
-                            <div class="py-1 mr-0.5 object-left flex-1">
-                                <PostDateInput bind:value={startDateValue} />
-                            </div>
-                            <div class="py-1 ml-0.5 object-right flex-1">
-                                <PostTimeInput bind:value={startTimeValue} />
-                            </div>
+                <div class="flex flex-col items-center">
+                    <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={openSpotPicker}
+                        >{$selectedLatitude === 0 ? 'Wybierz' : 'Zmień'} miejsce</Button
+                    >
+                    <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="spotErrorMsg">Musisz wybrać lokalizację</p>
+                </div>
+                <div class="flex flex-col mt-2 text-pine">
+                    <p class="text-lg">Data rozpoczęcia</p>
+                    <div class="flex flex-row">
+                        <div class="py-1 mr-0.5 object-left flex-1">
+                            <PostDateInput bind:value={startDateValue} />
+                        </div>
+                        <div class="py-1 ml-0.5 object-right flex-1">
+                            <PostTimeInput bind:value={startTimeValue} />
                         </div>
                     </div>
-                    <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={startDateTimeErrorMessage}>Data musi być w przyszłości</p>
+                </div>
+                <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={startDateTimeErrorMessage}>Data musi być w przyszłości</p>
 
-                    <div class="flex flex-col mt-2 text-pine">
-                        <p class="text-lg">Data zakończenia</p>
-                        <div class="flex flex-row">
-                            <div class="py-1 mr-0.5 object-left flex-1">
-                                <PostDateInput bind:value={endDateValue} />
-                            </div>
-                            <div class="py-1 ml-0.5 object-right flex-1">
-                                <PostTimeInput bind:value={endTimeValue} />
-                            </div>
+                <div class="flex flex-col mt-2 text-pine">
+                    <p class="text-lg">Data zakończenia</p>
+                    <div class="flex flex-row">
+                        <div class="py-1 mr-0.5 object-left flex-1">
+                            <PostDateInput bind:value={endDateValue} />
+                        </div>
+                        <div class="py-1 ml-0.5 object-right flex-1">
+                            <PostTimeInput bind:value={endTimeValue} />
                         </div>
                     </div>
-                    <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={endDateTimeErrorMessage}>Data musi być w przyszłości</p>
-                    <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={endDateAfterStartDateErrorMessage}>
-                        Data zakończenia musi być po dacie rozpoczęcia
-                    </p>
-
-                    <div class="mt-4">
-                        <PeopleLimitInput bind:value={peopleLimitValue} />
-                    </div>
-                    <p class="hidden peer-invalid:block text-red-500 text-sm my-2" id="peopleLimitErrorMsg">Limit osób musi być dodatni</p>
                 </div>
+                <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={endDateTimeErrorMessage}>Data musi być w przyszłości</p>
+                <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={endDateAfterStartDateErrorMessage}>
+                    Data zakończenia musi być po dacie rozpoczęcia
+                </p>
 
-                <PostDescription placeholder="Opis" bind:value={descriptionValue} maxLength={10000} />
-                <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
+                <div class="mt-4">
+                    <PeopleLimitInput bind:value={peopleLimitValue} />
+                </div>
+                <p class="hidden peer-invalid:block text-red-500 text-sm my-2" id="peopleLimitErrorMsg">Limit osób musi być dodatni</p>
+            </div>
 
-                <PostDescription placeholder="Harmonogram" bind:value={scheduleValue} maxLength={5000} />
-                <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="scheduleErrorMsg">Harmonogram nie może być pusty</p>
-            </div>
-            <div class="">
-                <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={handleSubmit}>Stwórz spotkanie</Button>
-            </div>
+            <PostDescription placeholder="Opis" bind:value={descriptionValue} maxLength={10000} />
+            <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
+
+            <PostDescription placeholder="Harmonogram" bind:value={scheduleValue} maxLength={5000} />
+            <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="scheduleErrorMsg">Harmonogram nie może być pusty</p>
+        </div>
+        <div class="">
+            <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={handleSubmit}>Stwórz spotkanie</Button>
         </div>
     </div>
-{/if}
+    {#if isSpotPickerActive}
+        <dialog
+            class="rounded-2xl mx-auto p-4 flex flex-col bg-ivory text-cocoa z-[1]
+    border-2 border-pine w-1/2 absolute top-1/2"
+        >
+            <div class="flex flex-row-reverse">
+                <button
+                    on:click={closeModal}
+                    class="rounded-full p-4 bg-pickle text-ivory hover:opacity-80 transition ease-in-out
+    focus:ring focus:ring-tea font-bold h-12 w-12"
+                >
+                    X
+                </button>
+            </div>
+            <div class="flex flex-col items-center">
+                <div
+                    class="absolute rounded-lg text-ivory bg-red-700 left-1/2 mx-auto bottom-10 h-16 w-48 lg:h-24 lg:w-72 z-[9999] opacity-0
+    transition ease-in-out delay-300 font-bold border-2 border-cocoa px-4 py-2 transform -translate-x-1/2 pointer-events-none"
+                    id="tooFarToast"
+                >
+                    <p>Za daleko od wybranego miasta!</p>
+                </div>
+                <div use:mapAction class="w-[40rem] h-64" />
+            </div>
+            <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="spotErrorMsg">Musisz wybrać lokalizację</p>
+            <Button clickHandler={submitChoice} class="absolute bottom-2 right-2 h-12 w-12"><MdCheck /></Button>
+        </dialog>
+    {/if}
+</div>

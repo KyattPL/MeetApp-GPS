@@ -218,75 +218,88 @@
     function openSpotPicker() {
         isSpotPickerActive = true;
     }
+
+    function closeModal() {
+        isSpotPickerActive = false;
+    }
 </script>
 
-{#if isSpotPickerActive}
-    <div class="h-screen">
-        <Header pageType="main" />
-        <button class="absolute rounded-full bg-grass bottom-20 right-4 h-12 w-12 lg:h-20 lg:w-20 lg:right-20 z-[9999]" on:click={submitChoice}>
-            <div class="h-8 w-8 ml-auto mr-auto lg:w-12 lg:h-12 text-cocoa">
-                <MdCheck />
-            </div>
-        </button>
-        <div
-            class="absolute rounded-lg text-ivory bg-red-700 left-1/2 mx-auto bottom-10 h-16 w-48 lg:h-24 lg:w-72 z-[9999] opacity-0
-transition ease-in-out delay-300 font-bold border-2 border-cocoa px-4 py-2 transform -translate-x-1/2 pointer-events-none"
-            id="tooFarToast"
-        >
-            <p>Za daleko od wybranego miasta!</p>
-        </div>
-        <div use:mapAction class="h-[calc(100%-4rem)] lg:h-[calc(100%-4rem)]" />
-    </div>
-{:else}
-    <div class="h-screen">
-        <Header />
-        <div class="flex flex-col h-[calc(100%-4rem)] lg:w-1/3 lg:mx-auto overflow-auto justify-between items-center bg-ivory">
-            <div class="w-full">
-                <PostNameInput placeholder="Nazwa spotkania" bind:value={title} maxLength={50} />
-                <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="titleErrorMsg">Tytuł musi mieć 5-50 znaków</p>
+<div class="h-screen">
+    <Header />
+    <div
+        class="bg-black opacity-0 w-full h-[calc(100%-10rem)] lg:h-[calc(100%-4rem)] z-[1] absolute transition ease-in-out duration-300
+        {isSpotPickerActive ? 'opacity-50' : 'hidden opacity-0'}"
+    />
+    <div class="flex flex-col h-[calc(100%-4rem)] lg:w-1/3 lg:mx-auto overflow-auto justify-between items-center bg-ivory">
+        <div class="w-full">
+            <PostNameInput placeholder="Nazwa spotkania" bind:value={title} maxLength={50} />
+            <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="titleErrorMsg">Tytuł musi mieć 5-50 znaków</p>
 
-                <div class="mx-1.5 mt-2" id="categoryInputBox">
-                    <MultiselectCategoryInput
-                        style=""
-                        data={categories}
-                        placeholder="Kategoria"
-                        inputId="categorySelect"
-                        bind:selected={categoryValue}
+            <div class="mx-1.5 mt-2" id="categoryInputBox">
+                <MultiselectCategoryInput style="" data={categories} placeholder="Kategoria" inputId="categorySelect" bind:selected={categoryValue} />
+            </div>
+            <p class="text-red-500 text-sm mt-1 mx-8 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
+            <div class="bg-tea mx-1.5 my-4 p-2 rounded-lg">
+                <div id="cityInputBox">
+                    <SelectCityInput
+                        fetch="http://meetapp.northeurope.cloudapp.azure.com:8080/api/locationsNonPost?nameSearch=[query]"
+                        placeholder="Miasto"
+                        inputId="citySelect"
+                        bind:selected={cityValue}
                     />
+                    <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
                 </div>
-                <p class="text-red-500 text-sm mt-1 mx-8 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
-                <div class="bg-tea mx-1.5 my-4 p-2 rounded-lg">
-                    <div id="cityInputBox">
-                        <SelectCityInput
-                            fetch="http://meetapp.northeurope.cloudapp.azure.com:8080/api/locationsNonPost?nameSearch=[query]"
-                            placeholder="Miasto"
-                            inputId="citySelect"
-                            bind:selected={cityValue}
-                        />
-                        <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
-                    </div>
-                    <div class="flex flex-col items-center">
-                        <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={openSpotPicker}>Wybierz miejsce</Button>
-                        <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="spotErrorMsg">Musisz wybrać lokalizację</p>
-                    </div>
-                    <div class="flex">
-                        <div class="py-2 mr-0.5 object-left flex-1">
-                            <PostDateInput bind:value={dateValue} />
-                        </div>
-                        <div class="py-2 ml-0.5 object-right flex-1">
-                            <PostTimeInput bind:value={timeValue} />
-                        </div>
-                    </div>
-                    <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={dateTimeErrorMessage}>Data musi być w przyszłości</p>
-                    <PeopleLimitInput bind:value={peopleLimitValue} />
-                    <p class="hidden peer-invalid:block text-red-500 text-sm my-2" id="peopleLimitErrorMsg">Limit osób musi być dodatni</p>
+                <div class="flex flex-col items-center">
+                    <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={openSpotPicker}
+                        >{$selectedLatitude === 0 ? 'Wybierz' : 'Zmień'} miejsce</Button
+                    >
+                    <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="spotErrorMsg">Musisz wybrać lokalizację</p>
                 </div>
-                <PostDescription bind:value={descriptionValue} maxLength={250} placeholder="Opis" />
-                <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
+                <div class="flex">
+                    <div class="py-2 mr-0.5 object-left flex-1">
+                        <PostDateInput bind:value={dateValue} />
+                    </div>
+                    <div class="py-2 ml-0.5 object-right flex-1">
+                        <PostTimeInput bind:value={timeValue} />
+                    </div>
+                </div>
+                <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={dateTimeErrorMessage}>Data musi być w przyszłości</p>
+                <PeopleLimitInput bind:value={peopleLimitValue} />
+                <p class="hidden peer-invalid:block text-red-500 text-sm my-2" id="peopleLimitErrorMsg">Limit osób musi być dodatni</p>
             </div>
-            <div class="">
-                <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={handleSubmit}>Stwórz spotkanie</Button>
-            </div>
+            <PostDescription bind:value={descriptionValue} maxLength={250} placeholder="Opis" />
+            <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
+        </div>
+        <div class="">
+            <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={handleSubmit}>Stwórz spotkanie</Button>
         </div>
     </div>
-{/if}
+    {#if isSpotPickerActive}
+        <dialog
+            class="rounded-2xl mx-auto p-4 flex flex-col bg-ivory text-cocoa z-[1]
+    border-2 border-pine w-1/2 absolute top-1/2"
+        >
+            <div class="flex flex-row-reverse">
+                <button
+                    on:click={closeModal}
+                    class="rounded-full p-4 bg-pickle text-ivory hover:opacity-80 transition ease-in-out
+    focus:ring focus:ring-tea font-bold h-12 w-12"
+                >
+                    X
+                </button>
+            </div>
+            <div class="flex flex-col items-center">
+                <div
+                    class="absolute rounded-lg text-ivory bg-red-700 left-1/2 mx-auto bottom-10 h-16 w-48 lg:h-24 lg:w-72 z-[9999] opacity-0
+    transition ease-in-out delay-300 font-bold border-2 border-cocoa px-4 py-2 transform -translate-x-1/2 pointer-events-none"
+                    id="tooFarToast"
+                >
+                    <p>Za daleko od wybranego miasta!</p>
+                </div>
+                <div use:mapAction class="w-[40rem] h-64" />
+            </div>
+            <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="spotErrorMsg">Musisz wybrać lokalizację</p>
+            <Button clickHandler={submitChoice} class="absolute bottom-2 right-2 h-12 w-12"><MdCheck /></Button>
+        </dialog>
+    {/if}
+</div>
