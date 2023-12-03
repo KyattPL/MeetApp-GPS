@@ -30,6 +30,10 @@ focus:outline-none focus:border-tea focus:ring-1 focus:ring-tea focus:text-cocoa
         border: none;
     }
 
+    :global(.time-picker) :global(.text-field) {
+        width: auto !important;
+    }
+
     :global(.time-picker) :global(.label) {
         color: #4d6753 !important;
     }

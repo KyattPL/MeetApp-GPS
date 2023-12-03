@@ -39,7 +39,8 @@
     let peopleLimitValue = null;
 
     let map;
-    let marker;
+    let marker = null;
+    let selectedSpot = null;
 
     if ($userDetails === null) {
         $redirect('/login');
@@ -198,7 +199,7 @@
     };
 
     function submitChoice() {
-        let coords = map.getCenter();
+        let coords = { lat: selectedSpot.lat, lng: selectedSpot.lng };
         let distance = calculateDistanceBetweenCoords(cityValue.lat, cityValue.lng, coords.lat, coords.lng);
 
         console.log(distance);
@@ -216,7 +217,13 @@
     }
 
     function createMap(container) {
-        let m = L.map(container).setView([cityValue.lat, cityValue.lng], 13);
+        let m;
+
+        if (marker !== null) {
+            m = L.map(container).setView([marker.getLatLng().lat, marker.getLatLng().lng], 13);
+        } else {
+            m = L.map(container).setView([cityValue.lat, cityValue.lng], 13);
+        }
         L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
             attribution: `&copy;<a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>,
           &copy;<a href="https://carto.com/attributions" target="_blank">CARTO</a>`,
@@ -231,14 +238,18 @@
         map = createMap(container);
         let customIcon = L.icon({ iconUrl: '../marker-user.png', iconSize: [25, 42] });
 
-        marker = L.marker(map.getCenter(), {
-            draggable: true,
-            autoPan: true,
-            icon: customIcon
-        }).addTo(map);
+        if (marker !== null) {
+            marker.addTo(map);
+        }
 
-        map.on('move', () => {
-            marker.setLatLng(map.getCenter());
+        map.on('click', (e) => {
+            selectedSpot = e.latlng;
+
+            if (marker !== null) {
+                marker.remove();
+            }
+
+            marker = L.marker(e.latlng, { icon: customIcon }).addTo(map);
         });
 
         return {

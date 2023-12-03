@@ -29,6 +29,10 @@ focus:outline-none focus:border-tea focus:ring-1 focus:ring-tea focus:text-cocoa
         border: none;
     }
 
+    :global(.date-picker) :global(.text-field) {
+        width: auto !important;
+    }
+
     :global(.month-header) {
         color: #4d6753 !important;
     }
