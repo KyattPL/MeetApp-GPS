@@ -52,7 +52,7 @@
     let selectedSpot = null;
 
     let image, fileInput;
-    let blob;
+    let blob = null;
 
     if ($userDetails === null) {
         $redirect('/login');
