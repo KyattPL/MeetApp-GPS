@@ -269,7 +269,7 @@
     };
 
     let image, fileInput;
-    let blob;
+    let blob = null;
 
     const onFileSelected = (e) => {
         blob = e.target.files[0];
