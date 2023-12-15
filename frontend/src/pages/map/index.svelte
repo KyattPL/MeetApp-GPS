@@ -221,7 +221,7 @@
         </select>
     </div>
     <div class="absolute z-[9999] p-4 flex flex-col bottom-4 right-4 bg-ivory text-cocoa rounded-xl border-pine border-2 gap-2">
-        <div class="text-lg font-bold self-center">Filtry:</div>
+        <div class="text-lg font-black self-center">Filtry:</div>
         <div class="flex flex-row items-center gap-2 justify-between">
             <div class="text-lg font-bold">Wydarzenia</div>
             <button

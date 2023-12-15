@@ -2,16 +2,22 @@
     import FaCalendarDay from 'svelte-icons/fa/FaCalendarDay.svelte';
     import MdAnnouncement from 'svelte-icons/md/MdAnnouncement.svelte';
     import MeetingSymbol from '../assets/MeetingSymbol.svelte';
-    import { redirect, url } from '@roxi/routify';
+    import { url } from '@roxi/routify';
 
-    import Footer from '../lib/Footer/Footer.svelte';
     import Header from '../lib/Header/Header.svelte';
-    import Button from '../lib/Button/Button.svelte';
-    import { userDetails } from '../lib/stores';
+    import HelpButton from '../lib/HelpButton/HelpButton.svelte';
 </script>
 
 <div class="h-screen">
     <Header />
+    <HelpButton>
+        <p>W <span class="text-pine font-black">MeetApp</span> rodzaje postów zostały podzielone na trzy kategorie:</p>
+        <ul class="list-disc list-inside">
+            <li><span class="text-grass font-black">Ogłoszenie</span> - elo elo</li>
+            <li><span class="text-pickle font-black">Spotkanie</span> - elo elo</li>
+            <li><span class="text-pine font-black">Wydarzenie</span> - elo elo</li>
+        </ul>
+    </HelpButton>
     <div class="flex flex-col h-[90%] overflow-auto lg:flex-row lg:justify-around">
         <a
             href={$url('/announcements')}
