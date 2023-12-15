@@ -12,6 +12,24 @@
     import ShowInactiveButton from '../../lib/ShowInactiveButton/ShowInactiveButton.svelte';
     import { userDetails } from '../../lib/stores.js';
 
+    import { afterPageLoad } from '@roxi/routify';
+    import { fade } from 'svelte/transition';
+
+    let wasPostChanged = false;
+    let toastText = '';
+
+    $afterPageLoad((p) => {
+        let lastVisited = p.__file.last.shortPath;
+        if (lastVisited === '/events/create') {
+            wasPostChanged = true;
+            toastText = 'Pomyślnie utworzono post!';
+        } else if (lastVisited === '/events/edit') {
+            wasPostChanged = true;
+            toastText = 'Pomyślnie edytowano post!';
+        }
+        return true;
+    });
+
     let data = [];
     let sortOptions = [
         { id: 1, name: 'Od najnowszych' },
@@ -73,6 +91,12 @@
 <div class="h-screen">
     <Header pageType="events" />
     <SortFilterBanner {sortOptions} />
+    {#if wasPostChanged}
+        <div class="flex flex-row bg-grass w-72 h-16 m-auto rounded p-4 absolute bottom-8 right-8" out:fade={{ delay: 50, duration: 300 }}>
+            <p class="w-full text-center text-ivory self-center">{toastText}</p>
+            <button class="text-ivory font-bold" on:click={() => (wasPostChanged = false)}>X</button>
+        </div>
+    {/if}
     <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-4rem)] lg:flex lg:flex-row" on:scroll={infiniteScroll} id="postsContainer">
         <div class="hidden lg:block lg:w-1/3 lg:bg-green-mist overflow-auto">
             <SortFilterColumn {sortOptions} />
