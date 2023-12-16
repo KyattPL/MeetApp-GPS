@@ -83,6 +83,8 @@
         </div>
         <div class="hidden lg:block lg:w-1/3" />
     </div>
-    <ShowActiveButton />
+    <div class="group">
+        <ShowActiveButton />
+    </div>
     <Footer pageType="events" />
 </div>

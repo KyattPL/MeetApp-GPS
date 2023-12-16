@@ -109,10 +109,16 @@
         <div class="hidden lg:block lg:w-1/3" />
     </div>
     {#if $userDetails !== null}
-        <ShowInactiveButton class="bottom-36" />
-        <AddPostButton pageType="events" />
+        <div class="group">
+            <ShowInactiveButton class="bottom-36" />
+        </div>
+        <div class="group">
+            <AddPostButton pageType="events" />
+        </div>
     {:else}
-        <ShowInactiveButton class="bottom-20" />
+        <div class="group">
+            <ShowInactiveButton class="bottom-20" />
+        </div>
     {/if}
     <Footer pageType="events" />
 </div>
