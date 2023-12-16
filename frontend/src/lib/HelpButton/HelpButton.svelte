@@ -27,8 +27,8 @@
 />
 {#if isModalOpen}
     <dialog
-        class="rounded-2xl mx-auto p-4 flex flex-col bg-ivory text-cocoa z-[1]
-border-2 border-pine w-1/2 absolute top-1/2 min-h-[8rem]"
+        class="rounded-2xl m-auto py-4 pl-4 pr-16 flex flex-col bg-ivory text-cocoa z-[1]
+border-2 border-pine w-1/2 absolute top-0 bottom-0 min-h-[8rem]"
     >
         <div class="absolute top-4 right-4">
             <button
