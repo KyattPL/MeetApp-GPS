@@ -1,5 +1,6 @@
 <script lang="ts">
     import Header from '../../../lib/Header/Header.svelte';
+    import HelpButton from '../../../lib/HelpButton/HelpButton.svelte';
     import PostNameInput from '../../../lib/PostNameInput/PostNameInput.svelte';
     import execute from '../../../lib/fetchWrapper';
     import PostDateInput from '../../../lib/PostDateInput/PostDateInput.svelte';
@@ -237,6 +238,35 @@
 
 <div class="h-screen">
     <Header />
+    <HelpButton>
+        <p>W ramach kreatora ogłoszeń przewidziane są następujące informacje:</p>
+        <ul class="list-disc list-inside">
+            <li>
+                <span class="font-bold">Nazwa spotkania</span> - pozwala nadać spotkaniu nazwę. Nazwa będzie wyświetlać się na liście spotkań.
+            </li>
+            <li>
+                <span class="font-bold">Kategoria</span> - pozwala wybrać kategorie, które najlepiej oddają charakter spotkania. Kategorie umożliwiają
+                filtrowanie spotkań na liście.
+            </li>
+            <li>
+                <span class="font-bold">Miasto</span> - pozwala wybrać miasto, w którym będzie odbywać się spotkanie.
+            </li>
+            <li>
+                <span class="font-bold">Przycisk "Wybierz miejsce"</span> - pozwala wybrać na mapie (w zależności od wcześniej wybranego miasta) dokładną
+                lokalizację spotkania.
+            </li>
+            <li>
+                <span class="font-bold">Data i godzina</span> - pozwala wybrać dokładną datę i godzinę rozpoczęcia spotkania.
+            </li>
+            <li>
+                <span class="font-bold">Limit osób</span> - pozwala wybrać maksymalną liczbę osób, które będą mogły zapisać się na to spotkanie.
+            </li>
+            <li>
+                <span class="font-bold">Opis</span> - pozwala na dodanie tekstu opisującego spotkanie. Opis będzie wyświetlać się jako dodatkowa informacja
+                po naciśnięciu spotkania z poziomu listy.
+            </li>
+        </ul>
+    </HelpButton>
     <div
         class="bg-black opacity-0 w-full h-[calc(100%-10rem)] lg:h-[calc(100%-4rem)] z-[1] absolute transition ease-in-out duration-300
         {isSpotPickerActive ? 'opacity-50' : 'hidden opacity-0'}"

@@ -6,6 +6,7 @@
     import MdCheck from 'svelte-icons/md/MdCheck.svelte';
 
     import Header from '../../../lib/Header/Header.svelte';
+    import HelpButton from '../../../lib/HelpButton/HelpButton.svelte';
     import PostNameInput from '../../../lib/PostNameInput/PostNameInput.svelte';
     import execute from '../../../lib/fetchWrapper';
     import PostDateInput from '../../../lib/PostDateInput/PostDateInput.svelte';
@@ -355,6 +356,45 @@
 
 <div class="h-screen">
     <Header />
+    <HelpButton>
+        <p>W ramach kreatora ogłoszeń przewidziane są następujące informacje:</p>
+        <ul class="list-disc list-inside">
+            <li>
+                <span class="font-bold">Nazwa wydarzenia</span> - pozwala nadać wydarzeniu nazwę. Nazwa będzie wyświetlać się na liście wydarzeń.
+            </li>
+            <li>
+                <span class="font-bold">Zdjęcie wydarzenia</span> - pozwala wybrać zdjęcie, które będzie wyświetlać się obok nazwy na liście wydarzeń.
+            </li>
+            <li>
+                <span class="font-bold">Kategoria</span> - pozwala wybrać kategorie, które najlepiej oddają charakter wydarzenia. Kategorie umożliwiają
+                filtrowanie wydarzeń na liście.
+            </li>
+            <li>
+                <span class="font-bold">Miasto</span> - pozwala wybrać miasto, w którym będzie odbywać się wydarzenie.
+            </li>
+            <li>
+                <span class="font-bold">Przycisk "Wybierz miejsce"</span> - pozwala wybrać na mapie (w zależności od wcześniej wybranego miasta) dokładną
+                lokalizację wydarzenia.
+            </li>
+            <li>
+                <span class="font-bold">Data rozpoczęcia</span> - pozwala wybrać dokładną datę i godzinę rozpoczęcia wydarzenia.
+            </li>
+            <li>
+                <span class="font-bold">Data zakończenia</span> - pozwala wybrać dokładną datę i godzinę zakończenia wydarzenia.
+            </li>
+            <li>
+                <span class="font-bold">Limit osób</span> - pozwala wybrać maksymalną liczbę osób, które będą mogły zapisać się na to wydarzenie.
+            </li>
+            <li>
+                <span class="font-bold">Opis</span> - pozwala na dodanie tekstu opisującego wydarzenie. Opis będzie wyświetlać się jako dodatkowa informacja
+                po wejściu w wydarzenie z poziomu listy.
+            </li>
+            <li>
+                <span class="font-bold">Harmonogram</span> - pozwala na dodanie informacji o harmonogramie wydarzenia. Będzie wyświetlać się bezpośrednio
+                pod opisem.
+            </li>
+        </ul>
+    </HelpButton>
     {#await promise then _}
         <div class="flex flex-col h-[calc(100%-4rem)] lg:w-1/3 lg:mx-auto overflow-auto justify-between items-center bg-ivory">
             <div class="w-full">

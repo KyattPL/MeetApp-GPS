@@ -8,6 +8,7 @@
 
     import Button from '../../../lib/Button/Button.svelte';
     import Header from '../../../lib/Header/Header.svelte';
+    import HelpButton from '../../../lib/HelpButton/HelpButton.svelte';
     import MultiselectCategoryInput from '../../../lib/MultiselectCategoryInput/MultiselectCategoryInput.svelte';
     import execute from '../../../lib/fetchWrapper';
     import SelectCityInput from '../../../lib/SelectCityInput/SelectCityInput.svelte';
@@ -188,6 +189,29 @@
 
 <div class="h-screen">
     <Header />
+    <HelpButton>
+        <p>W ramach kreatora ogłoszeń przewidziane są następujące informacje:</p>
+        <ul class="list-disc list-inside">
+            <li>
+                <span class="font-bold">Nazwa ogłoszenia</span> - pozwala nadać ogłoszeniu nazwę. Nazwa będzie wyświetlać się na liście ogłoszeń.
+            </li>
+            <li>
+                <span class="font-bold">Kategoria</span> - pozwala wybrać kategorie, które najlepiej oddają charakter ogłoszenia. Kategorie umożliwiają
+                filtrowanie ogłoszeń na liście.
+            </li>
+            <li>
+                <span class="font-bold">Miasto</span> - pozwala wybrać miasto, na terenie którego wystawiane jest ogłoszenie.
+            </li>
+            <li>
+                <span class="font-bold">Przycisk "Wybierz miejsce"</span> - pozwala wybrać na mapie (w zależności od wcześniej wybranego miasta) dokładną
+                lokalizację wystawienia ogłoszenia.
+            </li>
+            <li>
+                <span class="font-bold">Opis</span> - pozwala na dodanie tekstu opisującego ogłoszenie. Opis będzie wyświetlać się jako dodatkowa informacja
+                po naciśnięciu ogłoszenia z poziomu listy.
+            </li>
+        </ul>
+    </HelpButton>
     <div
         class="bg-black opacity-0 w-full h-[calc(100%-10rem)] lg:h-[calc(100%-4rem)] z-[1] absolute transition ease-in-out duration-300
         {isSpotPickerActive ? 'opacity-50' : 'hidden opacity-0'}"
