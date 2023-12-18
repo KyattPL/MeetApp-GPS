@@ -93,7 +93,7 @@
 
 <div class="h-screen">
     <Header pageType="announcements" />
-    <HelpButton>
+    ` <HelpButton>
         <p>Na tej stronie możesz wykonać następujące rzeczy:</p>
         <ul class="list-disc list-inside">
             <li>
@@ -109,10 +109,10 @@
                 formularz z tytułem, kategorią, opisem i innymi informacjami. Tworzenie dostępne jest tylko dla zalogowanych użytkowników.
             </li>
         </ul>
-    </HelpButton>
+    </HelpButton>`
     <SortFilterBanner {sortOptions} />
     {#if wasPostChanged}
-        <div class="flex flex-row bg-grass w-72 h-16 m-auto rounded p-4 absolute bottom-8 right-8" out:fade={{ delay: 50, duration: 300 }}>
+        <div class="flex flex-row bg-pine w-72 h-16 m-auto rounded p-4 absolute bottom-8 right-8" out:fade={{ delay: 50, duration: 300 }}>
             <p class="w-full text-center text-ivory self-center">{toastText}</p>
             <button class="text-ivory font-bold" on:click={() => (wasPostChanged = false)}>X</button>
         </div>

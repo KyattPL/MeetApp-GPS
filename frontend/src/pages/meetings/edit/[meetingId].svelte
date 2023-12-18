@@ -272,7 +272,7 @@
 <div class="h-screen">
     <Header />
     <HelpButton>
-        <p>W ramach kreatora ogłoszeń przewidziane są następujące informacje:</p>
+        <p>W ramach kreatora spotkań przewidziane są następujące informacje:</p>
         <ul class="list-disc list-inside">
             <li>
                 <span class="font-bold">Nazwa spotkania</span> - pozwala nadać spotkaniu nazwę. Nazwa będzie wyświetlać się na liście spotkań.
