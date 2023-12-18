@@ -26,7 +26,7 @@
     };
 
     const logout = () => {
-        execute('logout', 'POST').then((_) => (window.location.href = 'http://localhost:5173'));
+        execute('logout', 'POST').then((_) => (window.location.href = 'http://localhost:8080'));
     };
 
     let showDropdown = false;
@@ -48,29 +48,29 @@
     <div class="hidden lg:block lg:flex lg:flex-row lg:w-full lg:justify-center lg:items-center">
         <div
             class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl"
-            on:click={() => (window.location.href = 'http://localhost:5173/announcements')}
-            on:keydown={() => (window.location.href = 'http://localhost:5173/announcements')}
+            on:click={() => (window.location.href = 'http://localhost:8080/announcements')}
+            on:keydown={() => (window.location.href = 'http://localhost:8080/announcements')}
         >
             <span class={pageType === 'announcements' ? 'text-ivory' : 'text-cocoa'}> Ogłoszenia </span>
         </div>
         <div
             class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl"
-            on:click={() => (window.location.href = 'http://localhost:5173/meetings')}
-            on:keydown={() => (window.location.href = 'http://localhost:5173/meetings')}
+            on:click={() => (window.location.href = 'http://localhost:8080/meetings')}
+            on:keydown={() => (window.location.href = 'http://localhost:8080/meetings')}
         >
             <span class={pageType === 'meetings' ? 'text-ivory' : 'text-cocoa'}>Spotkania</span>
         </div>
         <div
             class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl"
-            on:click={() => (window.location.href = 'http://localhost:5173/events')}
-            on:keydown={() => (window.location.href = 'http://localhost:5173/events')}
+            on:click={() => (window.location.href = 'http://localhost:8080/events')}
+            on:keydown={() => (window.location.href = 'http://localhost:8080/events')}
         >
             <span class={pageType === 'events' ? 'text-ivory' : 'text-cocoa'}>Wydarzenia</span>
         </div>
         <div
             class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl"
-            on:click={() => (window.location.href = 'http://localhost:5173/map')}
-            on:keydown={() => (window.location.href = 'http://localhost:5173/map')}
+            on:click={() => (window.location.href = 'http://localhost:8080/map')}
+            on:keydown={() => (window.location.href = 'http://localhost:8080/map')}
         >
             <span class={pageType === 'map' ? 'text-ivory' : 'text-cocoa'}>Mapa</span>
         </div>

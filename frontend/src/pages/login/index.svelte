@@ -2,7 +2,7 @@
     import { url } from '@roxi/routify';
 
     const gotoToGoogleLogin = () => {
-        window.location.href = 'http://localhost:5173/oauth2/authorization/google';
+        window.location.href = 'http://localhost:8080/oauth2/authorization/google';
     };
 </script>
 
