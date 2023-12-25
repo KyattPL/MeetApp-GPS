@@ -22,6 +22,8 @@
 
     export let isOpen: Writable<boolean>;
 
+    const MODAL_STEPS = 9;
+
     let title = null;
     let categoryValue = null;
     let cityValue = null;
@@ -41,6 +43,7 @@
     let endDateAfterStartDateErrorMessage = null;
     let peopleLimitValue = null;
 
+    let currentStep = 1;
     let currentModal: 'title' | 'photo' | 'category' | 'city' | 'spot' | 'eventDate' | 'limit' | 'description' | 'schedule' | 'end' = 'title';
 
     const closeModal = () => {
@@ -63,6 +66,7 @@
         errorMsg.classList.remove('block');
         errorMsg.className += ' hidden';
         svControl.classList.remove('!border-red-500');
+        currentStep += 1;
         return true;
     };
 
@@ -78,6 +82,7 @@
         errorMsg.classList.remove('block');
         errorMsg.className += ' hidden';
         svControl.classList.remove('!border-red-500');
+        currentStep += 1;
         return true;
     };
 
@@ -124,6 +129,7 @@
                             endDateAfterStartDateErrorMessage.className += ' hidden';
                         }
 
+                        currentStep += 1;
                         return true;
                     }
                 }
@@ -150,6 +156,7 @@
             return false;
         }
         errorMessage.className += ' hidden';
+        currentStep += 1;
         return true;
     };
 
@@ -160,6 +167,7 @@
             return false;
         }
         errorMessage.className += ' hidden';
+        currentStep += 1;
         return true;
     };
 
@@ -170,6 +178,7 @@
             return false;
         }
         errorMessage.className += ' hidden';
+        currentStep += 1;
         return true;
     };
 
@@ -180,6 +189,7 @@
             return false;
         }
         errorMessage.className += ' hidden';
+        currentStep += 1;
         return true;
     };
 
@@ -190,6 +200,7 @@
             return false;
         }
         errorMessage.className += ' hidden';
+        currentStep += 1;
         return true;
     };
 
@@ -262,7 +273,7 @@
         $selectedLongitude = 0;
         $selectedLatitude = 0;
 
-        await fetch(`http://meetapp.northeurope.cloudapp.azure.com:8080/api/events`, {
+        await fetch(`http://localhost:8080/api/events`, {
             method: 'POST',
             body: multipartImage
         }).then(() => location.reload());
@@ -286,10 +297,10 @@
 </script>
 
 <dialog
-    class="rounded-2xl mx-auto p-4 flex flex-col bg-ivory text-cocoa z-[1]
-    border-2 border-pine w-1/2 absolute top-1/2"
+    class="rounded-2xl m-auto p-4 flex flex-col bg-ivory text-cocoa z-[1]
+    border-2 border-pine w-1/2 absolute top-0 bottom-0 min-h-[8rem]"
 >
-    <div class="flex flex-row-reverse">
+    <div class="absolute top-4 right-4">
         <button
             on:click={closeModal}
             class="rounded-full p-4 bg-pickle text-ivory hover:opacity-80 transition ease-in-out
@@ -299,13 +310,16 @@
         </button>
     </div>
     {#if currentModal === 'title'}
-        <div class="flex flex-col items-center">
+        <div class="flex flex-col items-center gap-4">
+            <p class="text-2xl text-cocoa font-bold">Wprowadź nazwę wydarzenia</p>
             <PostNameInput placeholder="Nazwa wydarzenia" bind:value={title} maxLength={50} />
             <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="titleErrorMsg">Tytuł musi mieć 5-50 znaków</p>
             <Button clickHandler={() => (validateTitle() ? (currentModal = 'photo') : null)} class="px-8 py-2">Dalej</Button>
+            <p>Krok {currentStep} z {MODAL_STEPS}</p>
         </div>
     {:else if currentModal === 'photo'}
-        <div class="flex flex-col items-center">
+        <div class="flex flex-col items-center gap-4">
+            <p class="text-2xl text-cocoa font-bold">Dodaj zdjęcie (lub pozostaw puste)</p>
             {#if image !== undefined}
                 <div class="mx-8 mb-2 aspect-square p-2 rounded-2xl bg-white flex justify-center text-center text-pickle flex-col">
                     <img class="rounded-2xl object-contain w-40" src={image} />
@@ -332,10 +346,18 @@
                 </div>
             {/if}
             <input style="display:none" type="file" accept=".jpg, .jpeg, .png" on:change={(e) => onFileSelected(e)} bind:this={fileInput} />
-            <Button clickHandler={() => (currentModal = 'category')} class="px-8 py-2">Dalej</Button>
+            <Button
+                clickHandler={() => {
+                    currentModal = 'category';
+                    currentStep += 1;
+                }}
+                class="px-8 py-2">Dalej</Button
+            >
+            <p>Krok {currentStep} z {MODAL_STEPS}</p>
         </div>
     {:else if currentModal === 'category'}
-        <div class="flex flex-col items-center">
+        <div class="flex flex-col items-center gap-4">
+            <p class="text-2xl text-cocoa font-bold">Wybierz kategorie</p>
             <div class="mx-1.5 mb-2 categorySvelecteBox" id="categoryInputBox">
                 <MultiselectCategoryInput
                     style="width: 30rem"
@@ -347,21 +369,27 @@
             </div>
             <p class="text-red-500 text-sm mt-1 mx-4 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
             <Button clickHandler={() => (validateCategory() ? (currentModal = 'city') : null)} class="px-8 py-2">Dalej</Button>
+            <p>Krok {currentStep} z {MODAL_STEPS}</p>
         </div>
     {:else if currentModal === 'city'}
-        <div class="flex flex-col items-center" id="cityInputBox">
-            <SelectCityInput
-                fetch="http://meetapp.northeurope.cloudapp.azure.com:8080/api/locationsNonPost?nameSearch=[query]"
-                placeholder="Miasto"
-                inputId="citySelect"
-                style="width: 30rem; margin-bottom: 1rem;"
-                bind:selected={cityValue}
-            />
+        <div class="flex flex-col items-center gap-4">
+            <p class="text-2xl text-cocoa font-bold">Wybierz miasto</p>
+            <div id="cityInputBox">
+                <SelectCityInput
+                    fetch="http://localhost:8080/api/locationsNonPost?nameSearch=[query]"
+                    placeholder="Miasto"
+                    inputId="citySelect"
+                    style="width: 30rem; margin-bottom: 1rem;"
+                    bind:selected={cityValue}
+                />
+            </div>
             <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
             <Button clickHandler={() => (validateCity() ? (currentModal = 'spot') : null)} class="px-8 py-2">Dalej</Button>
+            <p>Krok {currentStep} z {MODAL_STEPS}</p>
         </div>
     {:else if currentModal === 'spot'}
-        <div class="flex flex-col items-center">
+        <div class="flex flex-col items-center gap-4">
+            <p class="text-2xl text-cocoa font-bold">Wybierz dokładną lokalizację</p>
             <div
                 class="absolute rounded-lg text-ivory bg-red-700 left-1/2 mx-auto bottom-10 h-16 w-48 lg:h-24 lg:w-72 z-[9999] opacity-0
     transition ease-in-out delay-300 font-bold border-2 border-cocoa px-4 py-2 transform -translate-x-1/2 pointer-events-none"
@@ -372,12 +400,15 @@
             <div use:mapAction class="w-[40rem] h-64" />
         </div>
         <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="spotErrorMsg">Musisz wybrać lokalizację</p>
-        <Button clickHandler={submitChoice} class="absolute bottom-2 right-2 h-12 w-12"><MdCheck /></Button>
+        <div class="flex flex-col items-center gap-4 pt-4">
+            <Button clickHandler={submitChoice} class="px-8 py-2">Dalej</Button>
+            <p>Krok {currentStep} z {MODAL_STEPS}</p>
+        </div>
     {:else if currentModal === 'eventDate'}
-        <div class="flex flex-col items-center">
+        <div class="flex flex-col items-center gap-4">
             <div class="flex flex-col mt-2 text-pine">
-                <p class="text-lg">Data rozpoczęcia</p>
-                <div class="flex flex-row">
+                <p class="text-2xl text-cocoa font-bold">Wybierz datę rozpoczęcia</p>
+                <div class="flex flex-row self-center">
                     <div class="py-1 mr-0.5 object-left flex-1">
                         <PostDateInput bind:value={startDateValue} />
                     </div>
@@ -388,8 +419,8 @@
             </div>
             <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={startDateTimeErrorMessage}>Data musi być w przyszłości</p>
             <div class="flex flex-col mt-2 text-pine">
-                <p class="text-lg">Data zakończenia</p>
-                <div class="flex flex-row">
+                <p class="text-2xl text-cocoa font-bold">Wybierz datę zakończenia</p>
+                <div class="flex flex-row self-center">
                     <div class="py-1 mr-0.5 object-left flex-1">
                         <PostDateInput bind:value={endDateValue} />
                     </div>
@@ -403,28 +434,35 @@
                 Data zakończenia musi być po dacie rozpoczęcia
             </p>
             <Button clickHandler={() => (validateDateTime() ? (currentModal = 'limit') : null)} class="px-8 py-2">Dalej</Button>
+            <p>Krok {currentStep} z {MODAL_STEPS}</p>
         </div>
     {:else if currentModal === 'limit'}
-        <div class="flex flex-col items-center">
+        <div class="flex flex-col items-center gap-4">
+            <p class="text-2xl text-cocoa font-bold">Ustal limit osób</p>
             <PeopleLimitInput bind:value={peopleLimitValue} style="!w-[40rem] !mb-2 !border-pickle !border-2" />
             <p class="hidden peer-invalid:block text-red-500 text-sm my-2" id="peopleLimitErrorMsg">Limit osób musi być dodatni</p>
             <Button clickHandler={() => (validatePeopleLimit() ? (currentModal = 'description') : null)} class="px-8 py-2">Dalej</Button>
+            <p>Krok {currentStep} z {MODAL_STEPS}</p>
         </div>
     {:else if currentModal === 'description'}
-        <div class="flex flex-col items-center">
+        <div class="flex flex-col items-center gap-4">
+            <p class="text-2xl text-cocoa font-bold">Wprowadź opis</p>
             <PostDescription bind:value={descriptionValue} style="!w-[40rem] !mb-2" maxLength={10000} placeholder="Opis" />
             <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
             <Button clickHandler={() => (validateDescription() ? (currentModal = 'schedule') : null)} class="px-8 py-2">Dalej</Button>
+            <p>Krok {currentStep} z {MODAL_STEPS}</p>
         </div>
     {:else if currentModal === 'schedule'}
-        <div class="flex flex-col items-center">
+        <div class="flex flex-col items-center gap-4">
+            <p class="text-2xl text-cocoa font-bold">Wprowadź harmonogram</p>
             <PostDescription placeholder="Harmonogram" bind:value={scheduleValue} maxLength={5000} style="!w-[40rem] !mb-2" />
             <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="scheduleErrorMsg">Harmonogram nie może być pusty</p>
             <Button clickHandler={() => (validateSchedule() ? (currentModal = 'end') : null)} class="px-8 py-2">Dalej</Button>
+            <p>Krok {currentStep} z {MODAL_STEPS}</p>
         </div>
     {:else}
-        <div class="flex flex-col items-center">
-            <div class="flex flex-row text-cocoa mx-8 my-4">
+        <div class="flex flex-col items-center gap-4">
+            <div class="flex flex-row text-cocoa mx-8 my-4 items-center">
                 <div class="w-10 mx-2">
                     <MdInfoOutline />
                 </div>

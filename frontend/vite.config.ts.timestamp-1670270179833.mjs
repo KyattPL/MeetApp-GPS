@@ -5,13 +5,13 @@ var vite_config_default = defineConfig({
     server: {
         proxy: {
             '/api': {
-                target: 'http://meetapp.northeurope.cloudapp.azure.com:8080',
+                target: 'http://localhost:8080',
                 changeOrigin: true,
                 secure: false,
                 ws: true
             },
             '/oauth2/authorization/google': {
-                target: 'http://meetapp.northeurope.cloudapp.azure.com:8080',
+                target: 'http://localhost:8080',
                 changeOrigin: true,
                 secure: false,
                 ws: true
