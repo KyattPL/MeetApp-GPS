@@ -7,6 +7,7 @@
     import EventListElem from '../../lib/Events/EventListElem.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
     import Header from '../../lib/Header/Header.svelte';
+    import HelpButton from '../../lib/HelpButton/HelpButton.svelte';
     import SortFilterBanner from '../../lib/SortFilterBanner/SortFilterBanner.svelte';
     import SortFilterColumn from '../../lib/SortFilterColumn/SortFilterColumn.svelte';
     import execute from '../../lib/fetchWrapper';
@@ -81,6 +82,23 @@
 
 <div class="h-screen">
     <Header pageType="events" />
+    <HelpButton>
+        <p>Na tej stronie możesz wykonać następujące rzeczy:</p>
+        <ul class="list-disc list-inside">
+            <li>
+                <span class="font-bold">Przeglądanie postów</span> - znajduje się na środku strony, pozwala na zapoznanie się z treścią i szczegółami postów,
+                klikając na nie na liście. Można też zobaczyć informacje o autorze posta, zapisać się lub wypisać z posta oraz przejść na profil autora.
+            </li>
+            <li>
+                <span class="font-bold">Filtrowanie</span> - znajduje się po lewej stronie strony, pozwala na ograniczenie liczby postów, wybierając kategorię,
+                miejscowość lub nazwę posta. Można też posortować posty według daty lub liczby zapisanych.
+            </li>
+            <li>
+                <span class="font-bold">Tworzenie</span> - znajduje się w prawym dolnym rogu strony, pozwala na dodawanie własnych postów, wypełniając
+                formularz z tytułem, kategorią, opisem i innymi informacjami. Tworzenie dostępne jest tylko dla zalogowanych użytkowników.
+            </li>
+        </ul>
+    </HelpButton>
     <SortFilterBanner {sortOptions} />
     <div
         class="bg-black opacity-0 w-full h-[calc(100%-10rem)] lg:h-[calc(100%-4rem)] z-[1] absolute transition ease-in-out duration-300
@@ -98,19 +116,25 @@
         <div class="hidden lg:block lg:w-1/3" />
     </div>
     {#if $userDetails !== null}
-        <ShowInactiveButton class="bottom-36" />
+        <div class="group">
+            <ShowInactiveButton class="bottom-36" />
+        </div>
         {#if $isCreatorOpen}
             <EventCreator isOpen={isCreatorOpen} />
         {:else}
-            <button class="absolute rounded-full bg-grass bottom-20 right-4 h-12 w-12 lg:h-20 lg:w-20 lg:right-20" on:click={openCreatorModal}>
-                <div class="h-8 w-8 ml-auto mr-auto lg:w-12 lg:h-12 text-cocoa">
-                    <MdAdd />
-                </div>
-            </button>
+            <div class="group">
+                <button class="absolute rounded-full bg-grass bottom-20 right-4 h-12 w-12 lg:h-20 lg:w-20 lg:right-20" on:click={openCreatorModal}>
+                    <div class="h-8 w-8 ml-auto mr-auto lg:w-12 lg:h-12 text-cocoa">
+                        <MdAdd />
+                    </div>
+                </button>
+            </div>
         {/if}
         <!-- <AddPostButton pageType="events" /> -->
     {:else}
-        <ShowInactiveButton class="bottom-20" />
+        <div class="group">
+            <ShowInactiveButton class="bottom-20" />
+        </div>
     {/if}
     <Footer pageType="events" />
 </div>
