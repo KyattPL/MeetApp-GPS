@@ -32,7 +32,7 @@
     let selectedSpot = null;
 
     if ($userDetails === null) {
-        //$redirect('/login');
+        $redirect('/login');
     }
 
     execute('categories', 'GET')

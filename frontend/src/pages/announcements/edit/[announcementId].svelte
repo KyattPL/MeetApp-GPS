@@ -9,6 +9,7 @@
     import Button from '../../../lib/Button/Button.svelte';
     import Header from '../../../lib/Header/Header.svelte';
     import HelpButton from '../../../lib/HelpButton/HelpButton.svelte';
+    import InputHelpTooltip from '../../../lib/InputHelpTooltip/InputHelpTooltip.svelte';
     import MultiselectCategoryInput from '../../../lib/MultiselectCategoryInput/MultiselectCategoryInput.svelte';
     import execute from '../../../lib/fetchWrapper';
     import SelectCityInput from '../../../lib/SelectCityInput/SelectCityInput.svelte';
@@ -245,49 +246,58 @@
         {isSpotPickerActive ? 'opacity-50' : 'hidden opacity-0'}"
     />
     {#await promise then _}
-        <div class="flex flex-col h-[calc(100%-4rem)] lg:w-1/3 lg:mx-auto overflow-auto justify-between items-center bg-ivory">
-            <div class="w-full">
-                <PostNameInput placeholder="Nazwa ogłoszenia" bind:value={title} maxLength={50} />
-                <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="titleErrorMsg">Tytuł musi mieć 5-50 znaków</p>
+        <div class="flex flex-row justify-center">
+            <div class="flex mt-8 flex-col gap-10">
+                <InputHelpTooltip text="Wprowadź nazwę ogłoszenia" />
+                <InputHelpTooltip text="Wybierz kategorie" />
+                <InputHelpTooltip text="Wybierz miasto" />
+                <InputHelpTooltip text="Wybierz dokładne miejsce" />
+                <InputHelpTooltip text="Wprowadź opis" />
+            </div>
+            <div class="flex flex-col h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
+                <div class="w-full">
+                    <PostNameInput placeholder="Nazwa ogłoszenia" bind:value={title} maxLength={50} />
+                    <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="titleErrorMsg">Tytuł musi mieć 5-50 znaków</p>
 
-                <div class="mx-1.5 mt-2 categorySvelecteBox" id="categoryInputBox">
-                    <MultiselectCategoryInput
-                        style=""
-                        data={categories}
-                        placeholder="Kategoria"
-                        inputId="categorySelect"
-                        bind:selected={categoryValue}
-                    />
-                </div>
-                <p class="text-red-500 text-sm mt-1 mx-4 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
-                <div class="bg-tea mx-1.5 my-4 p-2 rounded-xl" id="cityInputBox">
-                    <SelectCityInput
-                        fetch="http://localhost:8080/api/locationsNonPost?nameSearch=[query]"
-                        placeholder="Miasto"
-                        inputId="citySelect"
-                        bind:selected={cityValue}
-                    />
-                    <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
-                </div>
-                <div class="flex flex-col items-center">
-                    <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={openSpotPicker}
-                        >{$selectedLatitude === 0 ? 'Wybierz' : 'Zmień'} miejsce
-                    </Button>
-                    <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="spotErrorMsg">Musisz wybrać lokalizację</p>
+                    <div class="mx-1.5 mt-2 categorySvelecteBox" id="categoryInputBox">
+                        <MultiselectCategoryInput
+                            style=""
+                            data={categories}
+                            placeholder="Kategoria"
+                            inputId="categorySelect"
+                            bind:selected={categoryValue}
+                        />
+                    </div>
+                    <p class="text-red-500 text-sm mt-1 mx-4 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
+                    <div class="bg-tea mx-1.5 my-4 p-2 rounded-xl" id="cityInputBox">
+                        <SelectCityInput
+                            fetch="http://localhost:8080/api/locationsNonPost?nameSearch=[query]"
+                            placeholder="Miasto"
+                            inputId="citySelect"
+                            bind:selected={cityValue}
+                        />
+                        <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={openSpotPicker}
+                            >{$selectedLatitude === 0 ? 'Wybierz' : 'Zmień'} miejsce
+                        </Button>
+                        <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="spotErrorMsg">Musisz wybrać lokalizację</p>
+                    </div>
+                    <div class="">
+                        <PostDescription bind:value={descriptionValue} maxLength={200} placeholder="Opis" />
+                        <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
+                    </div>
+                    <div class="flex flex-row text-cocoa items-center mx-8 my-4">
+                        <div class="w-10 mx-2">
+                            <MdInfoOutline />
+                        </div>
+                        <p class="text-sm">Twoje ogłoszenie wygaśnie miesiąc po opublikowaniu</p>
+                    </div>
                 </div>
                 <div class="">
-                    <PostDescription bind:value={descriptionValue} maxLength={200} placeholder="Opis" />
-                    <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
+                    <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={handleSubmit}>Zapisz zmiany</Button>
                 </div>
-                <div class="flex flex-row text-cocoa items-center mx-8 my-4">
-                    <div class="w-10 mx-2">
-                        <MdInfoOutline />
-                    </div>
-                    <p class="text-sm">Twoje ogłoszenie wygaśnie miesiąc po opublikowaniu</p>
-                </div>
-            </div>
-            <div class="">
-                <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={handleSubmit}>Zapisz zmiany</Button>
             </div>
         </div>
     {/await}
