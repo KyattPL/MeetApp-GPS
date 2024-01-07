@@ -273,7 +273,7 @@
         $selectedLongitude = 0;
         $selectedLatitude = 0;
 
-        await fetch(`http://localhost:8080/api/events`, {
+        await fetch(`http://meetapp-ux.northeurope.cloudapp.azure.com:8080/api/events`, {
             method: 'POST',
             body: multipartImage
         }).then(() => location.reload());
@@ -376,7 +376,7 @@
             <p class="text-2xl text-cocoa font-bold">Wybierz miasto</p>
             <div id="cityInputBox">
                 <SelectCityInput
-                    fetch="http://localhost:8080/api/locationsNonPost?nameSearch=[query]"
+                    fetch="http://meetapp-ux.northeurope.cloudapp.azure.com:8080/api/locationsNonPost?nameSearch=[query]"
                     placeholder="Miasto"
                     inputId="citySelect"
                     style="width: 30rem; margin-bottom: 1rem;"

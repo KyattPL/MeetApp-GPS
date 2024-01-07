@@ -260,7 +260,7 @@
             <p class="text-2xl text-cocoa font-bold">Wybierz miasto</p>
             <div id="cityInputBox">
                 <SelectCityInput
-                    fetch="http://localhost:8080/api/locationsNonPost?nameSearch=[query]"
+                    fetch="http://meetapp-ux.northeurope.cloudapp.azure.com:8080/api/locationsNonPost?nameSearch=[query]"
                     placeholder="Miasto"
                     inputId="citySelect"
                     style="width: 30rem; margin-bottom: 1rem;"
