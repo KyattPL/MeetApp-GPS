@@ -77,12 +77,9 @@
 
             title = r.title;
 
-            console.log(r.personQuota);
-            console.log(r.meetingDateTime);
-
             peopleLimitValue = r.personQuota === null ? null : r.personQuota;
-            dateValue = r.meetingDateTime.date.split('.').reverse().join('-');
-            timeValue = r.meetingDateTime.time;
+            dateValue = new Date(r.meetingDateTime.date.replace('.', '-'));
+            timeValue = new Date(r.meetingDateTime.date.replace('.', '-') + 'T' + r.meetingDateTime.time);
         })
         .then(() => execute('categories', 'GET').then(async (cats) => (categories = await cats.json())));
 
