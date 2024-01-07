@@ -131,7 +131,9 @@
         <div class="hidden lg:block lg:w-1/3" />
     </div>
     {#if $userDetails !== null}
-        <AddPostButton class="!bottom-36" pageType="announcements" />
+        <div class="group">
+            <AddPostButton class="!bottom-36" pageType="announcements" />
+        </div>
     {/if}
     <Footer pageType="announcements" />
 </div>
