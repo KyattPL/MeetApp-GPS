@@ -3,6 +3,8 @@
     export let style = '';
 
     const validateInput = () => {
+        console.log(value);
+
         if (value !== null && !/^$|^\d+$/.test(value)) {
             value = value.slice(0, value.length - 1);
         }
