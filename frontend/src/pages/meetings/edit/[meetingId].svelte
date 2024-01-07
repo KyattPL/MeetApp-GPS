@@ -78,8 +78,9 @@
             title = r.title;
 
             peopleLimitValue = r.personQuota === null ? null : r.personQuota;
-            dateValue = new Date(r.meetingDateTime.date.replace('.', '-'));
-            timeValue = new Date(r.meetingDateTime.date.replace('.', '-') + 'T' + r.meetingDateTime.time);
+            let correctDate = r.meetingDateTime.date.replaceAll('.', '-').split('-').reverse().join('-');
+            dateValue = new Date(correctDate);
+            timeValue = new Date(correctDate + 'T' + r.meetingDateTime.time);
         })
         .then(() => execute('categories', 'GET').then(async (cats) => (categories = await cats.json())));
 
