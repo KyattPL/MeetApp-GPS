@@ -92,10 +92,15 @@
             title = r.title;
             peopleLimitValue = r.personQuota === null ? null : r.personQuota;
             scheduleValue = r.schedule;
-            startDateValue = r.startDateTime.date.split('.').reverse().join('-');
-            startTimeValue = r.startDateTime.time;
-            endDateValue = r.endDateTime.date.split('.').reverse().join('-');
-            endTimeValue = r.endDateTime.time;
+
+            let correctStartDate = r.startDateTime.date.replaceAll('.', '-').split('-').reverse().join('-');
+            startDateValue = new Date(correctStartDate);
+            startTimeValue = new Date(correctStartDate + 'T' + r.startDateTime.time);
+
+            let correctEndDate = r.endDateTime.date.replaceAll('.', '-').split('-').reverse().join('-');
+            endDateValue = new Date(correctEndDate);
+            endTimeValue = new Date(correctEndDate + 'T' + r.endDateTime.time);
+
             image = r.picture === null ? undefined : r.picture;
         })
         .then(() => execute('categories', 'GET').then(async (cats) => (categories = await cats.json())));
