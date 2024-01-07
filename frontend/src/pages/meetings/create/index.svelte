@@ -161,7 +161,9 @@
             };
             $selectedLongitude = 0;
             $selectedLatitude = 0;
-            execute('meetings', 'POST', requestBody).then((r) => (window.location.href = 'http://localhost:8080/meetings'));
+            execute('meetings', 'POST', requestBody).then(
+                (r) => (window.location.href = 'http://meetapp-ux.northeurope.cloudapp.azure.com:8080/meetings')
+            );
         }
     };
 
@@ -298,7 +300,7 @@
                 <div class="bg-tea mx-1.5 my-4 p-2 rounded-lg">
                     <div id="cityInputBox">
                         <SelectCityInput
-                            fetch="http://localhost:8080/api/locationsNonPost?nameSearch=[query]"
+                            fetch="http://meetapp-ux.northeurope.cloudapp.azure.com:8080/api/locationsNonPost?nameSearch=[query]"
                             placeholder="Miasto"
                             inputId="citySelect"
                             bind:selected={cityValue}

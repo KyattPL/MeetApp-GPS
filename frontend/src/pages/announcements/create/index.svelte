@@ -241,7 +241,7 @@
                 <p class="text-red-500 text-sm mt-1 mx-4 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
                 <div class="bg-tea mx-1.5 my-4 p-2 rounded-xl" id="cityInputBox">
                     <SelectCityInput
-                        fetch="http://localhost:8080/api/locationsNonPost?nameSearch=[query]"
+                        fetch="http://meetapp-ux.northeurope.cloudapp.azure.com:8080/api/locationsNonPost?nameSearch=[query]"
                         placeholder="Miasto"
                         inputId="citySelect"
                         bind:selected={cityValue}
