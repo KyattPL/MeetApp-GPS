@@ -76,6 +76,10 @@
             $selectedLongitude = cityValue.lng;
 
             title = r.title;
+
+            console.log(r.personQuota);
+            console.log(r.meetingDateTime);
+
             peopleLimitValue = r.personQuota === null ? null : r.personQuota;
             dateValue = r.meetingDateTime.date.split('.').reverse().join('-');
             timeValue = r.meetingDateTime.time;
