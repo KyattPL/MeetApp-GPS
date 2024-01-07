@@ -93,6 +93,23 @@
 
 <div class="h-screen">
     <Header pageType="announcements" />
+    <HelpButton>
+        <p>Na tej stronie możesz wykonać następujące rzeczy:</p>
+        <ul class="list-disc list-inside">
+            <li>
+                <span class="font-bold">Przeglądanie postów</span> - znajduje się na środku strony, pozwala na zapoznanie się z treścią i szczegółami postów,
+                klikając na nie na liście. Można też zobaczyć informacje o autorze posta, zapisać się lub wypisać z posta oraz przejść na profil autora.
+            </li>
+            <li>
+                <span class="font-bold">Filtrowanie</span> - znajduje się po lewej stronie strony, pozwala na ograniczenie liczby postów, wybierając kategorię,
+                miejscowość lub nazwę posta. Można też posortować posty według daty lub liczby zapisanych.
+            </li>
+            <li>
+                <span class="font-bold">Tworzenie</span> - znajduje się w prawym dolnym rogu strony, pozwala na dodawanie własnych postów, wypełniając
+                formularz z tytułem, kategorią, opisem i innymi informacjami. Tworzenie dostępne jest tylko dla zalogowanych użytkowników.
+            </li>
+        </ul>
+    </HelpButton>
     <SortFilterBanner {sortOptions} />
     {#if wasPostChanged}
         <div class="flex flex-row bg-pine w-72 h-16 m-auto rounded p-4 absolute bottom-8 right-8" out:fade={{ delay: 50, duration: 300 }}>
@@ -115,43 +132,6 @@
     </div>
     {#if $userDetails !== null}
         <AddPostButton class="!bottom-36" pageType="announcements" />
-        <HelpButton>
-            <p>Na tej stronie możesz wykonać następujące rzeczy:</p>
-            <ul class="list-disc list-inside">
-                <li>
-                    <span class="font-bold">Przeglądanie postów</span> - znajduje się na środku strony, pozwala na zapoznanie się z treścią i szczegółami
-                    postów, klikając na nie na liście. Można też zobaczyć informacje o autorze posta, zapisać się lub wypisać z posta oraz przejść na profil
-                    autora.
-                </li>
-                <li>
-                    <span class="font-bold">Filtrowanie</span> - znajduje się po lewej stronie strony, pozwala na ograniczenie liczby postów, wybierając
-                    kategorię, miejscowość lub nazwę posta. Można też posortować posty według daty lub liczby zapisanych.
-                </li>
-                <li>
-                    <span class="font-bold">Tworzenie</span> - znajduje się w prawym dolnym rogu strony, pozwala na dodawanie własnych postów, wypełniając
-                    formularz z tytułem, kategorią, opisem i innymi informacjami. Tworzenie dostępne jest tylko dla zalogowanych użytkowników.
-                </li>
-            </ul>
-        </HelpButton>
-    {:else}
-        <HelpButton>
-            <p>Na tej stronie możesz wykonać następujące rzeczy:</p>
-            <ul class="list-disc list-inside">
-                <li>
-                    <span class="font-bold">Przeglądanie postów</span> - znajduje się na środku strony, pozwala na zapoznanie się z treścią i szczegółami
-                    postów, klikając na nie na liście. Można też zobaczyć informacje o autorze posta, zapisać się lub wypisać z posta oraz przejść na profil
-                    autora.
-                </li>
-                <li>
-                    <span class="font-bold">Filtrowanie</span> - znajduje się po lewej stronie strony, pozwala na ograniczenie liczby postów, wybierając
-                    kategorię, miejscowość lub nazwę posta. Można też posortować posty według daty lub liczby zapisanych.
-                </li>
-                <li>
-                    <span class="font-bold">Tworzenie</span> - znajduje się w prawym dolnym rogu strony, pozwala na dodawanie własnych postów, wypełniając
-                    formularz z tytułem, kategorią, opisem i innymi informacjami. Tworzenie dostępne jest tylko dla zalogowanych użytkowników.
-                </li>
-            </ul>
-        </HelpButton>
     {/if}
     <Footer pageType="announcements" />
 </div>
