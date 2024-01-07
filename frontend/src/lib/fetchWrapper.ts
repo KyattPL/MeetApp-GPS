@@ -1,5 +1,5 @@
 const execute = async (url: string, method: 'GET' | 'POST' | 'PUT' | 'DELETE', data?) => {
-    return await fetch(`http://meetapp.northeurope.cloudapp.azure.com:8080/api/${url}`, {
+    return await fetch(`http://meetapp-ux.northeurope.cloudapp.azure.com:8080/api/${url}`, {
         method: method,
         headers: {
             'Content-Type': 'application/json'

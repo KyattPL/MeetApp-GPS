@@ -6,19 +6,19 @@ export default defineConfig({
     server: {
         proxy: {
             '/api': {
-                target: 'http://meetapp.northeurope.cloudapp.azure.com:8080',
+                target: 'http://meetapp-ux.northeurope.cloudapp.azure.com:8080',
                 changeOrigin: true,
                 secure: false,
                 ws: true
             },
             '/oauth2/authorization/google': {
-                target: 'http://meetapp.northeurope.cloudapp.azure.com:8080',
+                target: 'http://meetapp-ux.northeurope.cloudapp.azure.com:8080',
                 changeOrigin: true,
                 secure: false,
                 ws: true
             }
             // "/websockets": {
-            //   target: "http://meetapp.northeurope.cloudapp.azure.com:8080",
+            //   target: "http://meetapp-ux.northeurope.cloudapp.azure.com:8080",
             //   ws: true,
             //   changeOrigin: true
             // }

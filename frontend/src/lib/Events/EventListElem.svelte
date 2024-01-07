@@ -28,13 +28,13 @@
             {#if data.picture !== null}
                 <img
                     class="w-full max-w-[10rem] aspect-auto"
-                    src="http://meetapp.northeurope.cloudapp.azure.com:8080/{data.picture}"
+                    src="http://meetapp-ux.northeurope.cloudapp.azure.com:8080/{data.picture}"
                     alt="Event poster"
                 />
             {:else}
                 <img
                     class="w-full max-w-[10rem] aspect-auto"
-                    src="http://meetapp.northeurope.cloudapp.azure.com:8080/no-image.png"
+                    src="http://meetapp-ux.northeurope.cloudapp.azure.com:8080/no-image.png"
                     alt="Missing poster"
                 />
             {/if}

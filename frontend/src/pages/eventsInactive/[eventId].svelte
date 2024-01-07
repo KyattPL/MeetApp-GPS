@@ -50,7 +50,7 @@
                     {#if data.picture !== null}
                         <img
                             class="rounded-lg object-fill w-full"
-                            src="http://meetapp.northeurope.cloudapp.azure.com:8080/{data.picture}"
+                            src="http://meetapp-ux.northeurope.cloudapp.azure.com:8080/{data.picture}"
                             alt="Event poster"
                         />
                         <div class="absolute bottom-0 left-0 right-0 px-4 py-2 opacity-40 bg-ivory">
